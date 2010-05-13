@@ -16,86 +16,44 @@ package org.jbei.bio.sequence
 		private static var rnaAlphabet:RNAAlphabet = RNAAlphabet.instance;
 		private static var proteinAlphabet:ProteinAlphabet = ProteinAlphabet.instance;
 		
+		private static var dnaToRNATranslationTable:Dictionary = null;
+		private static var rnaToDNATranslationTable:Dictionary = null;
 		private static var aminoAcidsTranslationTable:Dictionary = null;
 		
 		/* @throws org.jbei.bio.exceptions.IllegalSymbolException */
 		public static function dnaToRNASymbol(symbol:ISymbol):ISymbol
 		{
-			switch(symbol) {
-				case dnaAlphabet.a:
-					return rnaAlphabet.a;
-				case dnaAlphabet.t:
-					return rnaAlphabet.u;
-				case dnaAlphabet.g:
-					return rnaAlphabet.g;
-				case dnaAlphabet.c:
-					return rnaAlphabet.c;
-				case dnaAlphabet.y:
-					return rnaAlphabet.y;
-				case dnaAlphabet.r:
-					return rnaAlphabet.r;
-				case dnaAlphabet.s:
-					return rnaAlphabet.s;
-				case dnaAlphabet.w:
-					return rnaAlphabet.w;
-				case dnaAlphabet.k:
-					return rnaAlphabet.k;
-				case dnaAlphabet.m:
-					return rnaAlphabet.m;
-				case dnaAlphabet.b:
-					return rnaAlphabet.b;
-				case dnaAlphabet.v:
-					return rnaAlphabet.v;
-				case dnaAlphabet.d:
-					return rnaAlphabet.d;
-				case dnaAlphabet.h:
-					return rnaAlphabet.h;
-				case dnaAlphabet.n:
-					return rnaAlphabet.n;
-				case dnaAlphabet.gap:
-					return rnaAlphabet.gap;
-				default:
-					throw new IllegalSymbolException("Failed to find rna symbol for '" + symbol.value + "'");
+			initializeDNAToRNATranslationTable();
+			
+			if(symbol is GapSymbol) {
+				return rnaAlphabet.gap;
 			}
+			
+			var newSymbol:ISymbol = dnaToRNATranslationTable[symbol];
+			
+			if(newSymbol == null) {
+				throw new IllegalSymbolException();
+			}
+			
+			return newSymbol;
 		}
 		
 		/* @throws org.jbei.bio.exceptions.IllegalSymbolException */
 		public static function rnaToDNASymbol(symbol:ISymbol):ISymbol
 		{
-			switch(symbol) {
-				case rnaAlphabet.a:
-					return dnaAlphabet.a;
-				case rnaAlphabet.u:
-					return dnaAlphabet.t;
-				case rnaAlphabet.g:
-					return dnaAlphabet.g;
-				case rnaAlphabet.c:
-					return dnaAlphabet.c;
-				case rnaAlphabet.y:
-					return dnaAlphabet.y;
-				case rnaAlphabet.r:
-					return dnaAlphabet.r;
-				case rnaAlphabet.s:
-					return dnaAlphabet.s;
-				case rnaAlphabet.w:
-					return dnaAlphabet.w;
-				case rnaAlphabet.k:
-					return dnaAlphabet.k;
-				case rnaAlphabet.m:
-					return dnaAlphabet.m;
-				case rnaAlphabet.b:
-					return dnaAlphabet.b;
-				case rnaAlphabet.v:
-					return dnaAlphabet.v;
-				case rnaAlphabet.d:
-					return dnaAlphabet.d;
-				case rnaAlphabet.h:
-					return dnaAlphabet.h;
-				case rnaAlphabet.n:
-					return dnaAlphabet.n;
-				default:
-					throw new IllegalSymbolException("Failed to find rna symbol for '" + symbol.value + "'");
+			initializeRNAToDNATranslationTable();
+			
+			if(symbol is GapSymbol) {
+				return dnaAlphabet.gap;
 			}
+			
+			var newSymbol:ISymbol = dnaToRNATranslationTable[symbol];
+			
+			if(newSymbol == null) {
+				throw new IllegalSymbolException();
+			}
+			
+			return newSymbol;
 		}
 		
 		/* @throws org.jbei.bio.exceptions.IllegalSymbolException */
@@ -239,6 +197,58 @@ package org.jbei.bio.sequence
 			aminoAcidsTranslationTable['guc'] = ProteinAlphabet.instance.valine;
 			aminoAcidsTranslationTable['gua'] = ProteinAlphabet.instance.valine;
 			aminoAcidsTranslationTable['gug'] = ProteinAlphabet.instance.valine;
+		}
+		
+		private static function initializeDNAToRNATranslationTable():void
+		{
+			if(dnaToRNATranslationTable != null) {
+				return;
+			}
+			
+			dnaToRNATranslationTable = new Dictionary();
+			
+			dnaToRNATranslationTable[dnaAlphabet.a] = rnaAlphabet.a;
+			dnaToRNATranslationTable[dnaAlphabet.t] = rnaAlphabet.u;
+			dnaToRNATranslationTable[dnaAlphabet.g] = rnaAlphabet.g;
+			dnaToRNATranslationTable[dnaAlphabet.c] = rnaAlphabet.c;
+			dnaToRNATranslationTable[dnaAlphabet.y] = rnaAlphabet.y;
+			dnaToRNATranslationTable[dnaAlphabet.r] = rnaAlphabet.r;
+			dnaToRNATranslationTable[dnaAlphabet.s] = rnaAlphabet.s;
+			dnaToRNATranslationTable[dnaAlphabet.w] = rnaAlphabet.w;
+			dnaToRNATranslationTable[dnaAlphabet.k] = rnaAlphabet.k;
+			dnaToRNATranslationTable[dnaAlphabet.m] = rnaAlphabet.m;
+			dnaToRNATranslationTable[dnaAlphabet.b] = rnaAlphabet.b;
+			dnaToRNATranslationTable[dnaAlphabet.v] = rnaAlphabet.v;
+			dnaToRNATranslationTable[dnaAlphabet.d] = rnaAlphabet.d;
+			dnaToRNATranslationTable[dnaAlphabet.h] = rnaAlphabet.h;
+			dnaToRNATranslationTable[dnaAlphabet.n] = rnaAlphabet.n;
+			dnaToRNATranslationTable[dnaAlphabet.gap] = rnaAlphabet.gap;
+		}
+		
+		private static function initializeRNAToDNATranslationTable():void
+		{
+			if(rnaToDNATranslationTable != null) {
+				return;
+			}
+			
+			rnaToDNATranslationTable = new Dictionary();
+			
+			rnaToDNATranslationTable[rnaAlphabet.a] = dnaAlphabet.a;
+			rnaToDNATranslationTable[rnaAlphabet.u] = dnaAlphabet.t;
+			rnaToDNATranslationTable[rnaAlphabet.g] = dnaAlphabet.g;
+			rnaToDNATranslationTable[rnaAlphabet.c] = dnaAlphabet.c;
+			rnaToDNATranslationTable[rnaAlphabet.y] = dnaAlphabet.y;
+			rnaToDNATranslationTable[rnaAlphabet.r] = dnaAlphabet.r;
+			rnaToDNATranslationTable[rnaAlphabet.s] = dnaAlphabet.s;
+			rnaToDNATranslationTable[rnaAlphabet.w] = dnaAlphabet.w;
+			rnaToDNATranslationTable[rnaAlphabet.k] = dnaAlphabet.k;
+			rnaToDNATranslationTable[rnaAlphabet.m] = dnaAlphabet.m;
+			rnaToDNATranslationTable[rnaAlphabet.b] = dnaAlphabet.b;
+			rnaToDNATranslationTable[rnaAlphabet.v] = dnaAlphabet.v;
+			rnaToDNATranslationTable[rnaAlphabet.d] = dnaAlphabet.d;
+			rnaToDNATranslationTable[rnaAlphabet.h] = dnaAlphabet.h;
+			rnaToDNATranslationTable[rnaAlphabet.n] = dnaAlphabet.n;
+			rnaToDNATranslationTable[rnaAlphabet.gap] = dnaAlphabet.gap;
 		}
 	}
 }
