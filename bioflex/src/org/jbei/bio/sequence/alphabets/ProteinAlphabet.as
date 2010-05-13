@@ -1,6 +1,7 @@
 package org.jbei.bio.sequence.alphabets
 {
 	import org.jbei.bio.sequence.symbols.AminoAcidSymbol;
+	import org.jbei.bio.sequence.symbols.GapSymbol;
 
 	public class ProteinAlphabet extends AbstractAlphabet
 	{

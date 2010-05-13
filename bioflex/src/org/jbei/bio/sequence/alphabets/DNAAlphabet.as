@@ -1,5 +1,6 @@
 package org.jbei.bio.sequence.alphabets
 {
+	import org.jbei.bio.sequence.symbols.GapSymbol;
 	import org.jbei.bio.sequence.symbols.ISymbol;
 	import org.jbei.bio.sequence.symbols.NucleotideSymbol;
 
@@ -51,7 +52,7 @@ package org.jbei.bio.sequence.alphabets
 		public function get n():NucleotideSymbol { return _n; }
 		
 		// Public Methods
-		public function symbolByValue(value:String):NucleotideSymbol
+		public function symbolByValue(value:String):ISymbol
 		{
 			return symbolsMap[value];
 		}

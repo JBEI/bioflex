@@ -2,17 +2,23 @@ package org.jbei.bio.sequence.alphabets
 {
 	import flash.utils.Dictionary;
 	
+	import org.jbei.bio.sequence.symbols.GapSymbol;
 	import org.jbei.bio.sequence.symbols.ISymbol;
 
 	public class AbstractAlphabet implements IAlphabet
 	{
 		protected var symbolsMap:Dictionary;
 		
+		protected const _gap:GapSymbol = new GapSymbol("Gap", "-");
+		
 		// Constructor
 		public function AbstractAlphabet()
 		{
 			initialize();
 		}
+		
+		// Properties
+		public function get gap():GapSymbol { return _gap; }
 		
 		// Public Methods
 		public function getSymbols():Vector.<ISymbol>
@@ -35,6 +41,8 @@ package org.jbei.bio.sequence.alphabets
 		protected function initialize():void
 		{
 			symbolsMap = new Dictionary(true);
+			
+			symbolsMap[_gap.value] = _gap;
 		}
 	}
 }
