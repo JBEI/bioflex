@@ -109,6 +109,25 @@ package org.jbei.bio.sequence
 			return symbol;
 		}
 		
+		public static function dnaToProteinSymbol(nucleotide1:ISymbol, nucleotide2:ISymbol, nucleotide3:ISymbol):ISymbol
+		{
+			initializeAminoAcidsTranslationTable();
+			
+			if(nucleotide1 is GapSymbol || nucleotide2 is GapSymbol || nucleotide3 is GapSymbol) {
+				return proteinAlphabet.gap;
+			}
+			
+			var triplet:String = nucleotide1.value + nucleotide2.value + nucleotide3.value;
+			
+			var symbol:ISymbol = aminoAcidsTranslationTable[triplet];
+			
+			if(symbol == null) {
+				return proteinAlphabet.gap;
+			}
+			
+			return symbol;
+		}
+		
 		public static function rnaToProtein(symbolList:SymbolList):SymbolList
 		{
 			var length:int = symbolList.length - (symbolList.length % 3);
@@ -136,35 +155,52 @@ package org.jbei.bio.sequence
 			
 			aminoAcidsTranslationTable = new Dictionary();
 			
+			aminoAcidsTranslationTable['gct'] = ProteinAlphabet.instance.alanine;
 			aminoAcidsTranslationTable['gcc'] = ProteinAlphabet.instance.alanine;
 			aminoAcidsTranslationTable['gca'] = ProteinAlphabet.instance.alanine;
 			aminoAcidsTranslationTable['gcg'] = ProteinAlphabet.instance.alanine;
 			aminoAcidsTranslationTable['gcu'] = ProteinAlphabet.instance.alanine;
+			aminoAcidsTranslationTable['cgt'] = ProteinAlphabet.instance.arginine;
 			aminoAcidsTranslationTable['cgc'] = ProteinAlphabet.instance.arginine;
 			aminoAcidsTranslationTable['cga'] = ProteinAlphabet.instance.arginine;
 			aminoAcidsTranslationTable['cgg'] = ProteinAlphabet.instance.arginine;
 			aminoAcidsTranslationTable['aga'] = ProteinAlphabet.instance.arginine;
 			aminoAcidsTranslationTable['agg'] = ProteinAlphabet.instance.arginine;
 			aminoAcidsTranslationTable['cgu'] = ProteinAlphabet.instance.arginine;
+			aminoAcidsTranslationTable['aat'] = ProteinAlphabet.instance.asparagine;
 			aminoAcidsTranslationTable['aac'] = ProteinAlphabet.instance.asparagine;
 			aminoAcidsTranslationTable['aau'] = ProteinAlphabet.instance.asparagine;
+			aminoAcidsTranslationTable['gat'] = ProteinAlphabet.instance.aspartic;
 			aminoAcidsTranslationTable['gac'] = ProteinAlphabet.instance.aspartic;
 			aminoAcidsTranslationTable['gau'] = ProteinAlphabet.instance.aspartic;
+			aminoAcidsTranslationTable['tgt'] = ProteinAlphabet.instance.cysteine;
+			aminoAcidsTranslationTable['tgc'] = ProteinAlphabet.instance.cysteine;
 			aminoAcidsTranslationTable['ugu'] = ProteinAlphabet.instance.cysteine;
 			aminoAcidsTranslationTable['ugc'] = ProteinAlphabet.instance.cysteine;
 			aminoAcidsTranslationTable['gaa'] = ProteinAlphabet.instance.glutamic;
 			aminoAcidsTranslationTable['gag'] = ProteinAlphabet.instance.glutamic;
 			aminoAcidsTranslationTable['caa'] = ProteinAlphabet.instance.glutamine;
 			aminoAcidsTranslationTable['cag'] = ProteinAlphabet.instance.glutamine;
+			aminoAcidsTranslationTable['ggt'] = ProteinAlphabet.instance.glycine;
 			aminoAcidsTranslationTable['ggc'] = ProteinAlphabet.instance.glycine;
 			aminoAcidsTranslationTable['gga'] = ProteinAlphabet.instance.glycine;
 			aminoAcidsTranslationTable['ggg'] = ProteinAlphabet.instance.glycine;
 			aminoAcidsTranslationTable['ggu'] = ProteinAlphabet.instance.glycine;
+			aminoAcidsTranslationTable['cat'] = ProteinAlphabet.instance.histidine;
 			aminoAcidsTranslationTable['cac'] = ProteinAlphabet.instance.histidine;
 			aminoAcidsTranslationTable['cau'] = ProteinAlphabet.instance.histidine;
+			aminoAcidsTranslationTable['att'] = ProteinAlphabet.instance.isoleucine;
+			aminoAcidsTranslationTable['atc'] = ProteinAlphabet.instance.isoleucine;
+			aminoAcidsTranslationTable['ata'] = ProteinAlphabet.instance.isoleucine;
 			aminoAcidsTranslationTable['auu'] = ProteinAlphabet.instance.isoleucine;
 			aminoAcidsTranslationTable['auc'] = ProteinAlphabet.instance.isoleucine;
 			aminoAcidsTranslationTable['aua'] = ProteinAlphabet.instance.isoleucine;
+			aminoAcidsTranslationTable['ctt'] = ProteinAlphabet.instance.leucine;
+			aminoAcidsTranslationTable['ctc'] = ProteinAlphabet.instance.leucine;
+			aminoAcidsTranslationTable['cta'] = ProteinAlphabet.instance.leucine;
+			aminoAcidsTranslationTable['ctg'] = ProteinAlphabet.instance.leucine;
+			aminoAcidsTranslationTable['tta'] = ProteinAlphabet.instance.leucine;
+			aminoAcidsTranslationTable['ttg'] = ProteinAlphabet.instance.leucine;
 			aminoAcidsTranslationTable['cuu'] = ProteinAlphabet.instance.leucine;
 			aminoAcidsTranslationTable['cuc'] = ProteinAlphabet.instance.leucine;
 			aminoAcidsTranslationTable['cua'] = ProteinAlphabet.instance.leucine;
@@ -173,26 +209,43 @@ package org.jbei.bio.sequence
 			aminoAcidsTranslationTable['uug'] = ProteinAlphabet.instance.leucine;
 			aminoAcidsTranslationTable['aaa'] = ProteinAlphabet.instance.lysine;
 			aminoAcidsTranslationTable['aag'] = ProteinAlphabet.instance.lysine;
+			aminoAcidsTranslationTable['atg'] = ProteinAlphabet.instance.methionine;
 			aminoAcidsTranslationTable['aug'] = ProteinAlphabet.instance.methionine;
+			aminoAcidsTranslationTable['ttt'] = ProteinAlphabet.instance.phenylalanine;
+			aminoAcidsTranslationTable['ttc'] = ProteinAlphabet.instance.phenylalanine;
 			aminoAcidsTranslationTable['uuu'] = ProteinAlphabet.instance.phenylalanine;
 			aminoAcidsTranslationTable['uuc'] = ProteinAlphabet.instance.phenylalanine;
+			aminoAcidsTranslationTable['cct'] = ProteinAlphabet.instance.proline;
 			aminoAcidsTranslationTable['ccc'] = ProteinAlphabet.instance.proline;
 			aminoAcidsTranslationTable['cca'] = ProteinAlphabet.instance.proline;
 			aminoAcidsTranslationTable['ccg'] = ProteinAlphabet.instance.proline;
 			aminoAcidsTranslationTable['ccu'] = ProteinAlphabet.instance.proline;
+			aminoAcidsTranslationTable['tct'] = ProteinAlphabet.instance.serine;
+			aminoAcidsTranslationTable['tcc'] = ProteinAlphabet.instance.serine;
+			aminoAcidsTranslationTable['tca'] = ProteinAlphabet.instance.serine;
+			aminoAcidsTranslationTable['tcg'] = ProteinAlphabet.instance.serine;
+			aminoAcidsTranslationTable['agt'] = ProteinAlphabet.instance.serine;
 			aminoAcidsTranslationTable['agc'] = ProteinAlphabet.instance.serine;
 			aminoAcidsTranslationTable['ucu'] = ProteinAlphabet.instance.serine;
 			aminoAcidsTranslationTable['ucc'] = ProteinAlphabet.instance.serine;
 			aminoAcidsTranslationTable['uca'] = ProteinAlphabet.instance.serine;
 			aminoAcidsTranslationTable['ucg'] = ProteinAlphabet.instance.serine;
 			aminoAcidsTranslationTable['agu'] = ProteinAlphabet.instance.serine;
+			aminoAcidsTranslationTable['act'] = ProteinAlphabet.instance.threonine;
 			aminoAcidsTranslationTable['acc'] = ProteinAlphabet.instance.threonine;
 			aminoAcidsTranslationTable['aca'] = ProteinAlphabet.instance.threonine;
 			aminoAcidsTranslationTable['acg'] = ProteinAlphabet.instance.threonine;
 			aminoAcidsTranslationTable['acu'] = ProteinAlphabet.instance.threonine;
+			aminoAcidsTranslationTable['tgg'] = ProteinAlphabet.instance.tryptophan;
 			aminoAcidsTranslationTable['ugg'] = ProteinAlphabet.instance.tryptophan;
+			aminoAcidsTranslationTable['tat'] = ProteinAlphabet.instance.tyrosine;
+			aminoAcidsTranslationTable['tac'] = ProteinAlphabet.instance.tyrosine;
 			aminoAcidsTranslationTable['uau'] = ProteinAlphabet.instance.tyrosine;
 			aminoAcidsTranslationTable['uac'] = ProteinAlphabet.instance.tyrosine;
+			aminoAcidsTranslationTable['gtt'] = ProteinAlphabet.instance.valine;
+			aminoAcidsTranslationTable['gtc'] = ProteinAlphabet.instance.valine;
+			aminoAcidsTranslationTable['gta'] = ProteinAlphabet.instance.valine;
+			aminoAcidsTranslationTable['gtg'] = ProteinAlphabet.instance.valine;
 			aminoAcidsTranslationTable['guu'] = ProteinAlphabet.instance.valine;
 			aminoAcidsTranslationTable['guc'] = ProteinAlphabet.instance.valine;
 			aminoAcidsTranslationTable['gua'] = ProteinAlphabet.instance.valine;
