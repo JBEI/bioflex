@@ -29,7 +29,7 @@ package org.jbei.bio.sequence.alphabets
 		private const _v:AminoAcidSymbol = new AminoAcidSymbol('Valine ', 'Val', 'V');
 		
 		// Public Methods
-		public static function instance():ProteinAlphabet
+		public static function get instance():ProteinAlphabet
 		{
 			if(_instance == null) {
 				_instance = new ProteinAlphabet();
