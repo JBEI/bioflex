@@ -4,6 +4,5 @@ package org.jbei.bio.sequence.symbols
 	{
 		function get name():String;
 		function get value():String;
-		function get ambiguousMatches():Vector.<ISymbol>;
 	}
 }

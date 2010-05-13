@@ -4,15 +4,13 @@ package org.jbei.bio.sequence.symbols
 	{
 		private var _name:String;
 		private var _value:String;
-		private var _ambiguousMatches:Vector.<ISymbol>;
 		private var _threeLettersName:String;
 		
-		public function AminoAcidSymbol(name:String, threeLettersName:String, value:String, ambiguousMatches:Vector.<ISymbol> = null)
+		public function AminoAcidSymbol(name:String, threeLettersName:String, value:String)
 		{
 			_name = name;
 			_value = value;
 			_threeLettersName = threeLettersName;
-			_ambiguousMatches = ambiguousMatches;
 		}
 		
 		// ISymbol implementation
@@ -29,11 +27,6 @@ package org.jbei.bio.sequence.symbols
 		public function get value():String
 		{
 			return _value;
-		}
-		
-		public function get ambiguousMatches():Vector.<ISymbol>
-		{
-			return _ambiguousMatches; 
 		}
 	}
 }
