@@ -6,7 +6,6 @@ package org.jbei.bio.sequence
 	import org.jbei.bio.sequence.dna.DNASequence;
 	import org.jbei.bio.sequence.symbols.ISymbol;
 	import org.jbei.bio.sequence.symbols.IllegalSymbolException;
-	import org.jbei.bio.sequence.symbols.NucleotideSymbol;
 
 	public class DNATools
 	{
@@ -19,7 +18,7 @@ package org.jbei.bio.sequence
 			
 			var symbolVector:Vector.<ISymbol> = new Vector.<ISymbol>(dnaSequence.length, true);
 			for(var i:int = 0; i < dnaSequence.length; i++) {
-				var symbol:NucleotideSymbol = dnaAlphabet.symbolByValue(dnaSequence.charAt(i));
+				var symbol:ISymbol = dnaAlphabet.symbolByValue(dnaSequence.charAt(i));
 				
 				if(symbol == null) {
 					throw new IllegalSymbolException();
@@ -38,42 +37,45 @@ package org.jbei.bio.sequence
 		}
 		
 		/* @throws org.jbei.bio.exceptions.IllegalSymbolException */
-		public static function complementSymbol(symbol:NucleotideSymbol):NucleotideSymbol
+		public static function complementSymbol(symbol:ISymbol):ISymbol
 		{
 			var dnaAlphabet:DNAAlphabet = DNAAlphabet.instance;
 			
-			if(symbol == dnaAlphabet.a) {
-				return dnaAlphabet.t;
-			} else if(symbol == dnaAlphabet.t) {
-				return dnaAlphabet.a;
-			} else if(symbol == dnaAlphabet.g) {
-				return dnaAlphabet.c;
-			} else if(symbol == dnaAlphabet.c) {
-				return dnaAlphabet.g;
-			} else if(symbol == dnaAlphabet.y) {
-				return dnaAlphabet.r;
-			} else if(symbol == dnaAlphabet.r) {
-				return dnaAlphabet.y;
-			} else if(symbol == dnaAlphabet.s) {
-				return dnaAlphabet.s;
-			} else if(symbol == dnaAlphabet.w) {
-				return dnaAlphabet.w;
-			} else if(symbol == dnaAlphabet.k) {
-				return dnaAlphabet.m;
-			} else if(symbol == dnaAlphabet.m) {
-				return dnaAlphabet.k;
-			} else if(symbol == dnaAlphabet.b) {
-				return dnaAlphabet.v;
-			} else if(symbol == dnaAlphabet.v) {
-				return dnaAlphabet.b;
-			} else if(symbol == dnaAlphabet.d) {
-				return dnaAlphabet.h;
-			} else if(symbol == dnaAlphabet.h) {
-				return dnaAlphabet.d;
-			} else if(symbol == dnaAlphabet.n) {
-				return dnaAlphabet.n;
-			} else {
-				throw new IllegalSymbolException("Failed to find complement for symbol '" + symbol.value + "'");
+			switch(symbol) {
+				case dnaAlphabet.a:
+					return dnaAlphabet.t;
+				case dnaAlphabet.t:
+					return dnaAlphabet.a;
+				case dnaAlphabet.g:
+					return dnaAlphabet.c;
+				case dnaAlphabet.c:
+					return dnaAlphabet.g;
+				case dnaAlphabet.y:
+					return dnaAlphabet.r;
+				case dnaAlphabet.r:
+					return dnaAlphabet.y;
+				case dnaAlphabet.s:
+					return dnaAlphabet.s;
+				case dnaAlphabet.w:
+					return dnaAlphabet.w;
+				case dnaAlphabet.k:
+					return dnaAlphabet.m;
+				case dnaAlphabet.m:
+					return dnaAlphabet.k;
+				case dnaAlphabet.b:
+					return dnaAlphabet.v;
+				case dnaAlphabet.v:
+					return dnaAlphabet.b;
+				case dnaAlphabet.d:
+					return dnaAlphabet.h;
+				case dnaAlphabet.h:
+					return dnaAlphabet.d;
+				case dnaAlphabet.n:
+					return dnaAlphabet.n;
+				case dnaAlphabet.gap:
+					return dnaAlphabet.gap;
+				default:
+					throw new IllegalSymbolException("Failed to find complement for symbol '" + symbol.value + "'");
 			}
 		}
 		
@@ -85,7 +87,7 @@ package org.jbei.bio.sequence
 			
 			if(symbols.length > 0) {
 				for(var i:int = 0; i < symbols.length; i++) {
-					complementSymbols[i] = complementSymbol(symbols[i] as NucleotideSymbol);
+					complementSymbols[i] = complementSymbol(symbols[i]);
 				}
 			}
 			
@@ -102,7 +104,7 @@ package org.jbei.bio.sequence
 				var length:int = symbols.length;
 				
 				for(var i:int = 0; i < length; i++) {
-					reverseComplementSymbols[length - i - 1] = complementSymbol(symbols[i] as NucleotideSymbol);
+					reverseComplementSymbols[length - i - 1] = complementSymbol(symbols[i]);
 				}
 			}
 			
