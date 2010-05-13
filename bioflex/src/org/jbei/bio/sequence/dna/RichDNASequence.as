@@ -8,9 +8,9 @@ package org.jbei.bio.sequence.dna
 		private var _features:Vector.<Feature> = new Vector.<Feature>();
 		
 		// Constructor
-		public function RichDNASequence(name:String, symbolList:SymbolList, accession:String="", version:int=1, seqVersion:Number=0.0)
+		public function RichDNASequence(name:String, symbolList:SymbolList, circular:Boolean = false, accession:String="", version:int=1, seqVersion:Number=0.0)
 		{
-			super(name, symbolList, accession, version, seqVersion);
+			super(name, symbolList, circular, accession, version, seqVersion);
 		}
 		
 		// Properties

@@ -8,15 +8,17 @@ package org.jbei.bio.sequence.dna
 		private var _accession:String;
 		private var _version:int;
 		private var _seqVersion:Number;
+		private var _circular:Boolean;
 		
 		// Constructor
-		public function DNASequence(name:String, symbolList:SymbolList, accession:String = "", version:int = 1, seqVersion:Number = 0.0)
+		public function DNASequence(name:String, symbolList:SymbolList, circular:Boolean = false, accession:String = "", version:int = 1, seqVersion:Number = 0.0)
 		{
 			super(name, symbolList);
 			
 			_accession = accession;
 			_version = version;
 			_seqVersion = seqVersion;
+			_circular = circular;
 		}
 		
 		// Properties
@@ -48,6 +50,16 @@ package org.jbei.bio.sequence.dna
 		public function set seqVersion(value:Number):void
 		{
 			_seqVersion = value;
+		}
+		
+		public function get circular():Boolean
+		{
+			return _circular;
+		}
+		
+		public function set circular(value:Boolean):void
+		{
+			_circular = value;
 		}
 	}
 }
