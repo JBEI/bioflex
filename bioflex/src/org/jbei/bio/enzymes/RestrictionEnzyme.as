@@ -11,11 +11,9 @@ package org.jbei.bio.enzymes
 		private var _dsReverse:int;
 		private var _usForward:int;
 		private var _usReverse:int;
-		private var _dsCutType:int;
-		private var _usCutType:int;
 		
 		// Constructor
-		public function RestrictionEnzyme(name:String, site:String, cutType:int, forwardRegex:String, reverseRegex:String, dsForward:int, dsReverse:int, usForward:int, usReverse:int, dsCutType:int, usCutType:int)
+		public function RestrictionEnzyme(name:String, site:String, cutType:int, forwardRegex:String, reverseRegex:String, dsForward:int, dsReverse:int, usForward:int, usReverse:int)
 		{
 			_name = name;
 			_site = site;
@@ -26,8 +24,6 @@ package org.jbei.bio.enzymes
 			_dsReverse = dsReverse;
 			_usForward = usForward;
 			_usReverse = usReverse;
-			_dsCutType = dsCutType;
-			_usCutType = usCutType;
 		}
 		
 		// Properties
@@ -119,26 +115,6 @@ package org.jbei.bio.enzymes
 		public function set usReverse(value:int):void	
 		{
 			_usReverse = value;
-		}
-		
-		public function get dsCutType():int
-		{
-			return _dsCutType;
-		}
-		
-		public function set dsCutType(value:int):void	
-		{
-			_dsCutType = value;
-		}
-		
-		public function get usCutType():int
-		{
-			return _usCutType;
-		}
-		
-		public function set usCutType(value:int):void	
-		{
-			_usCutType = value;
 		}
 		
 		// Public Methods
