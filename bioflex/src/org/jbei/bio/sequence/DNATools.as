@@ -31,7 +31,7 @@ package org.jbei.bio.sequence
 		}
 		
 		/* @throws org.jbei.bio.exceptions.IllegalSymbolException */
-		public static function createDNASequence(dnaSequence:String, name:String):Sequence
+		public static function createDNASequence(name:String, dnaSequence:String):Sequence
 		{
 			return new DNASequence(name, createDNA(dnaSequence));
 		}

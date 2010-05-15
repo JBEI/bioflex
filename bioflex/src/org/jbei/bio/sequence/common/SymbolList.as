@@ -32,6 +32,11 @@ package org.jbei.bio.sequence.common
 		}
 		
 		/* @throws RangeError */
+		public function hasGap():Boolean
+		{
+			return _symbols.indexOf(_alphabet.gap) > 0;
+		}
+
 		public function subList(start:int, end:int):SymbolList
 		{
 			var subSymbols:Vector.<ISymbol> = _symbols.slice(start, end);
@@ -41,14 +46,13 @@ package org.jbei.bio.sequence.common
 		
 		public function seqString():String
 		{
-			var sequence:String = "";
-			var seqVector:Vector.<String> = new Vector.<String>(_symbols.length, true);
+			var buffer:Array = new Array(_symbols.length);
 			
 			for(var i:int = 0; i < _symbols.length; i++) {
-				seqVector[i] = _symbols[i].value;
+				buffer[i] = _symbols[i].value.charCodeAt(0);
 			}
 			
-			return seqVector.join('');
+			return String.fromCharCode.apply(null, buffer);
 		}
 		
 		public function clear():void
