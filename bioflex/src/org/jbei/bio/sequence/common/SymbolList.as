@@ -3,6 +3,9 @@ package org.jbei.bio.sequence.common
 	import org.jbei.bio.sequence.alphabets.IAlphabet;
 	import org.jbei.bio.sequence.symbols.ISymbol;
 
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class SymbolList
 	{
 		private var _symbols:Vector.<ISymbol>;

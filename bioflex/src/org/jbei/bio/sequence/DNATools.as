@@ -7,6 +7,9 @@ package org.jbei.bio.sequence
 	import org.jbei.bio.sequence.symbols.ISymbol;
 	import org.jbei.bio.sequence.symbols.IllegalSymbolException;
 
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class DNATools
 	{
 		/* @throws org.jbei.bio.exceptions.IllegalSymbolException */
@@ -33,7 +36,7 @@ package org.jbei.bio.sequence
 		/* @throws org.jbei.bio.exceptions.IllegalSymbolException */
 		public static function createDNASequence(name:String, dnaSequence:String):Sequence
 		{
-			return new DNASequence(name, createDNA(dnaSequence));
+			return new DNASequence(createDNA(dnaSequence), name);
 		}
 		
 		/* @throws org.jbei.bio.exceptions.IllegalSymbolException */

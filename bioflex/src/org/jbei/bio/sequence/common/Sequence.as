@@ -1,11 +1,14 @@
 package org.jbei.bio.sequence.common
 {
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class Sequence extends SymbolList
 	{
 		private var _name:String = "";
 		
 		// Constructor
-		public function Sequence(name:String, symbolList:SymbolList)
+		public function Sequence(symbolList:SymbolList, name:String = "")
 		{
 			_name = name;
 			

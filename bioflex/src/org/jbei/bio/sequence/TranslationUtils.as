@@ -10,6 +10,9 @@ package org.jbei.bio.sequence
 	import org.jbei.bio.sequence.symbols.ISymbol;
 	import org.jbei.bio.sequence.symbols.IllegalSymbolException;
 
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class TranslationUtils
 	{
 		private static var dnaAlphabet:DNAAlphabet = DNAAlphabet.instance;

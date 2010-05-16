@@ -2,6 +2,9 @@ package org.jbei.bio.sequence.dna
 {
 	import org.jbei.bio.sequence.common.StrandedAnnotation;
 
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class Feature extends StrandedAnnotation
 	{
 		private var _name:String;

@@ -3,14 +3,17 @@ package org.jbei.bio.sequence.dna
 	import org.jbei.bio.BioException;
 	import org.jbei.bio.sequence.common.SymbolList;
 
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class RichDNASequence extends DNASequence
 	{
 		private var _features:Vector.<Feature> = new Vector.<Feature>();
 		
 		// Constructor
-		public function RichDNASequence(name:String, symbolList:SymbolList, circular:Boolean = false, accession:String="", version:int=1, seqVersion:Number=0.0)
+		public function RichDNASequence(symbolList:SymbolList, name:String = "", circular:Boolean = false, accession:String="", version:int=1, seqVersion:Number=0.0)
 		{
-			super(name, symbolList, circular, accession, version, seqVersion);
+			super(symbolList, name, circular, accession, version, seqVersion);
 		}
 		
 		// Properties

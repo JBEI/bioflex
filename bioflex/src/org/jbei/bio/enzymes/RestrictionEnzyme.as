@@ -1,5 +1,8 @@
 package org.jbei.bio.enzymes
 {
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class RestrictionEnzyme
 	{
 		private var _name:String;

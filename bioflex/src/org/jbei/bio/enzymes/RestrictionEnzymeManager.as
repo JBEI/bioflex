@@ -2,6 +2,9 @@ package org.jbei.bio.enzymes
 {
 	import mx.core.ByteArrayAsset;
 
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class RestrictionEnzymeManager
 	{
 		[Embed("assets/rebase.xml", mimeType="application/octet-stream")]

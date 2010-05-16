@@ -1,5 +1,8 @@
 package org.jbei.bio.sequence.common
 {
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class StrandedAnnotation extends Annotation
 	{
 		private var _strand:int = StrandType.FORWARD;

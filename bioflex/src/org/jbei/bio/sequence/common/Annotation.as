@@ -1,5 +1,8 @@
 package org.jbei.bio.sequence.common
 {
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class Annotation implements IAnnotation
 	{
 		private var _start:int = 0;

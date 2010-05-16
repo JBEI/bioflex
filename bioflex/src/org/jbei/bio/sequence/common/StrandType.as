@@ -1,5 +1,8 @@
 package org.jbei.bio.sequence.common
 {
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class StrandType
 	{
 		// Static Public Constants

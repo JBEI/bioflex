@@ -1,5 +1,8 @@
 package org.jbei.bio.sequence.symbols
 {
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class IllegalSymbolException extends Error
 	{
 		// Constructor

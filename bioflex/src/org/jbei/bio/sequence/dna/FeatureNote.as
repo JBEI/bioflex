@@ -1,5 +1,8 @@
 package org.jbei.bio.sequence.dna
 {
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class FeatureNote
 	{
 		private var _name:String;

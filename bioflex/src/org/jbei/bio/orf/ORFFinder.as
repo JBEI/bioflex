@@ -8,6 +8,9 @@ package org.jbei.bio.orf
 	import org.jbei.bio.sequence.symbols.ISymbol;
 	import org.jbei.bio.sequence.symbols.NucleotideSymbol;
 
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class ORFFinder
 	{
 		// Public Methods

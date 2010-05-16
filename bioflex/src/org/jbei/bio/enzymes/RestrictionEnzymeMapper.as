@@ -5,6 +5,9 @@ package org.jbei.bio.enzymes
 	import org.jbei.bio.sequence.common.StrandType;
 	import org.jbei.bio.sequence.common.SymbolList;
 
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class RestrictionEnzymeMapper
 	{
 		public static function cutSequence(restrictionEnzymes:Vector.<RestrictionEnzyme>, symbolList:SymbolList):Dictionary /* [RestrictionEnzyme] = Array(RestrictionCutSite) */

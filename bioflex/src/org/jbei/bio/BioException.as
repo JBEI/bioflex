@@ -1,5 +1,8 @@
 package org.jbei.bio
 {
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class BioException extends Error
 	{
 		// Constructor

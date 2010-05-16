@@ -3,6 +3,9 @@ package org.jbei.bio.orf
 	import org.jbei.bio.sequence.common.StrandType;
 	import org.jbei.bio.sequence.common.StrandedAnnotation;
 	
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class ORF extends StrandedAnnotation
 	{
 		private var _frame:int;

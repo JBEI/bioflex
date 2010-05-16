@@ -3,6 +3,9 @@ package org.jbei.bio.sequence.dna
 	import org.jbei.bio.sequence.common.Sequence;
 	import org.jbei.bio.sequence.common.SymbolList;
 
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class DNASequence extends Sequence
 	{
 		private var _accession:String;
@@ -11,9 +14,9 @@ package org.jbei.bio.sequence.dna
 		private var _circular:Boolean;
 		
 		// Constructor
-		public function DNASequence(name:String, symbolList:SymbolList, circular:Boolean = false, accession:String = "", version:int = 1, seqVersion:Number = 0.0)
+		public function DNASequence(symbolList:SymbolList, name:String = "", circular:Boolean = false, accession:String = "", version:int = 1, seqVersion:Number = 0.0)
 		{
-			super(name, symbolList);
+			super(symbolList, name);
 			
 			_accession = accession;
 			_version = version;

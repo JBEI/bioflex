@@ -2,6 +2,9 @@ package org.jbei.bio.enzymes
 {
 	import org.jbei.bio.sequence.common.StrandedAnnotation;
 	
+    /**
+     * @author Zinovii Dmytriv
+     */
 	public class RestrictionCutSite extends StrandedAnnotation
 	{
 		private var _restrictionEnzyme:RestrictionEnzyme;
