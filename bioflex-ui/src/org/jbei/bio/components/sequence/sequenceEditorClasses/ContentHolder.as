@@ -748,7 +748,7 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
                         _featuredSequence.insertFeaturedSequence(pasteFeaturedSequence, _caretPosition);
                         
                         tryMoveCaretToPosition(_caretPosition + pasteSequence1.length);
-                    }*/				
+                    }*/
                 }
             } else if(Clipboard.generalClipboard.hasFormat(ClipboardFormats.TEXT_FORMAT)) {
                 /*var pasteSequence2:String = String(Clipboard.generalClipboard.getData(ClipboardFormats.TEXT_FORMAT, ClipboardTransferMode.CLONE_ONLY)).toUpperCase();
@@ -767,7 +767,7 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
                     _featuredSequence.insertSequence(new DNASequence(pasteSequence2), _caretPosition);
                     
                     tryMoveCaretToPosition(_caretPosition + pasteSequence2.length);
-                }*/				
+                }*/
             }
         }
         

@@ -43,7 +43,7 @@ package org.jbei.bio.components.sequence
         public final function get revComSequence():DNASequence
         {
             if(dirty) {
-                _revComSequence = new DNASequence(DNATools.reverseComplement(_dnaSequence));
+                _revComSequence = new DNASequence(DNATools.complement(_dnaSequence));
                 
                 dirty = false;
                 

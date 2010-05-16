@@ -3,15 +3,15 @@ package org.jbei.bio.components.sequence.common
     /**
      * @author Zinovii Dmytriv
      */
-	public class PrintableContent
-	{
-		public var width:Number = 0;
-		public var height:Number = 0;
-		public var pages:Array = new Array(); /* of BitmapData */;
-		
-		// Constructor
-		public function PrintableContent()
-		{
-		}
-	}
+    public class PrintableContent
+    {
+        public var width:Number = 0;
+        public var height:Number = 0;
+        public var pages:Array = new Array(); /* of BitmapData */;
+        
+        // Constructor
+        public function PrintableContent()
+        {
+        }
+    }
 }
