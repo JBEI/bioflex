@@ -65,11 +65,11 @@ package org.jbei.bio.sequence.common
         
         public function symbols():Vector.<ISymbol>
         {
-            var clonedVector:Vector.<ISymbol> = new Vector.<ISymbol>(_symbols.length, true);
+            var clonedVector:Vector.<ISymbol> = new Vector.<ISymbol>();
             
             if(_symbols.length > 0) {
                 for(var i:int = 0; i < _symbols.length; i++) {
-                    clonedVector[i] = _symbols[i];
+                    clonedVector.push(_symbols[i]);
                 }
             }
             
@@ -92,7 +92,12 @@ package org.jbei.bio.sequence.common
         /* @throws RangeError */
         public function insertSymbols(position:int, newSymbols:SymbolList):void
         {
-            _symbols.splice(position, 0, newSymbols.symbols());
+            // Wasn't able to do this due to Adobe BUG!
+            // _symbols.splice(position, 0, newSymbols);
+            
+            for(var i:int = 0; i < newSymbols.length; i++) {
+                _symbols.splice(position + i, 0, newSymbols.symbolAt(i));
+            }
         }
     }
 }

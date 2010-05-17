@@ -19,7 +19,7 @@ package org.jbei.bio.sequence
             
             dnaSequence = dnaSequence.toLowerCase();
             
-            var symbolVector:Vector.<ISymbol> = new Vector.<ISymbol>(dnaSequence.length, true);
+            var symbolVector:Vector.<ISymbol> = new Vector.<ISymbol>();
             for(var i:int = 0; i < dnaSequence.length; i++) {
                 var symbol:ISymbol = dnaAlphabet.symbolByValue(dnaSequence.charAt(i));
                 
@@ -27,7 +27,7 @@ package org.jbei.bio.sequence
                     throw new IllegalSymbolException();
                 }
                 
-                symbolVector[i] = symbol;
+                symbolVector.push(symbol);
             }
             
             return new SymbolList(symbolVector, dnaAlphabet);
@@ -86,11 +86,11 @@ package org.jbei.bio.sequence
         public static function complement(symbolList:SymbolList):SymbolList
         {
             var symbols:Vector.<ISymbol> = symbolList.symbols();
-            var complementSymbols:Vector.<ISymbol> = new Vector.<ISymbol>(symbols.length, true);
+            var complementSymbols:Vector.<ISymbol> = new Vector.<ISymbol>();
             
             if(symbols.length > 0) {
                 for(var i:int = 0; i < symbols.length; i++) {
-                    complementSymbols[i] = complementSymbol(symbols[i]);
+                    complementSymbols.push(complementSymbol(symbols[i]));
                 }
             }
             
@@ -101,13 +101,13 @@ package org.jbei.bio.sequence
         public static function reverseComplement(symbolList:SymbolList):SymbolList
         {
             var symbols:Vector.<ISymbol> = symbolList.symbols();
-            var reverseComplementSymbols:Vector.<ISymbol> = new Vector.<ISymbol>(symbols.length, true);
+            var reverseComplementSymbols:Vector.<ISymbol> = new Vector.<ISymbol>();
             
             if(symbols.length > 0) {
                 var length:int = symbols.length;
                 
-                for(var i:int = 0; i < length; i++) {
-                    reverseComplementSymbols[length - i - 1] = complementSymbol(symbols[i]);
+                for(var i:int = length - 1; i >= 0; i--) {
+                    reverseComplementSymbols.push(complementSymbol(symbols[length - i]));
                 }
             }
             
