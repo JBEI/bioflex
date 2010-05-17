@@ -46,8 +46,6 @@ package org.jbei.bio.components.sequence
                 _revComSequence = new DNASequence(DNATools.complement(_dnaSequence));
                 
                 dirty = false;
-                
-                trace("revcom recalculated!");
             }
             
             return _revComSequence;

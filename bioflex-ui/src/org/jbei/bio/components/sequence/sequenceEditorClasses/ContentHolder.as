@@ -2,6 +2,7 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
 {
     import flash.desktop.Clipboard;
     import flash.desktop.ClipboardFormats;
+    import flash.desktop.ClipboardTransferMode;
     import flash.display.BitmapData;
     import flash.display.Graphics;
     import flash.events.ContextMenuEvent;
@@ -23,6 +24,9 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
     import org.jbei.bio.components.sequence.common.CaretEvent;
     import org.jbei.bio.components.sequence.common.IRenderer;
     import org.jbei.bio.components.sequence.common.SelectionEvent;
+    import org.jbei.bio.sequence.DNATools;
+    import org.jbei.bio.sequence.alphabets.DNAAlphabet;
+    import org.jbei.bio.sequence.dna.DNASequence;
 
     /**
      * @author Zinovii Dmytriv
@@ -32,7 +36,6 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
         public static const BACKGROUND_COLOR:int = 0xFFFFFF;
         public static const SPLIT_LINE_COLOR:int = 0x000000;
         public static const SPLIT_LINE_TRANSPARENCY:Number = 0.15;
-        public static const FEATURED_SEQUENCE_CLIPBOARD_KEY:String = "FeaturedSequenceObject";
         
         private var sequenceEditor:SequenceEditor;
         private var renderers:Vector.<IRenderer> = new Vector.<IRenderer>();
@@ -41,9 +44,6 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
         private var selectionLayer:SelectionLayer;
         private var sequenceRenderer:SequenceRenderer;
         private var customContextMenu:ContextMenu;
-        private var editFeatureContextMenuItem:ContextMenuItem;
-        private var removeFeatureContextMenuItem:ContextMenuItem;
-        private var selectedAsNewFeatureContextMenuItem:ContextMenuItem;
         
         private var _sequenceProvider:SequenceProvider;
         
@@ -701,8 +701,7 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
         {
             if(isValidIndex(selectionLayer.start) && isValidIndex(selectionLayer.end)) {
                 Clipboard.generalClipboard.clear();
-                //Clipboard.generalClipboard.setData(FEATURED_SEQUENCE_CLIPBOARD_KEY, _featuredSequence.subFeaturedSequence(selectionLayer.start, selectionLayer.end), true);
-                //Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, _featuredSequence.subSequence(selectionLayer.start, selectionLayer.end).sequence, true);
+                Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, _sequenceProvider.sequence.subList(selectionLayer.start, selectionLayer.end).seqString(), true);
             }
         }
         
@@ -710,16 +709,9 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
         {
             if(isValidIndex(selectionLayer.start) && isValidIndex(selectionLayer.end)) {
                 Clipboard.generalClipboard.clear();
-                //Clipboard.generalClipboard.setData(FEATURED_SEQUENCE_CLIPBOARD_KEY, _featuredSequence.subFeaturedSequence(selectionLayer.start, selectionLayer.end), true);
-                //Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, _featuredSequence.subSequence(selectionLayer.start, selectionLayer.end).sequence, true);
+                Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, _sequenceProvider.sequence.subList(selectionLayer.start, selectionLayer.end).seqString(), true);
                 
-                /*if(_safeEditing) {
-                    doDeleteSequence(selectionLayer.start, selectionLayer.end);
-                } else {
-                    _featuredSequence.removeSequence(selectionLayer.start, selectionLayer.end);
-                    
-                    deselect();
-                }*/
+                sequenceProvider.deleteSequence(selectionLayer.start, selectionLayer.end - selectionLayer.start + 1);
             }
         }
         
@@ -727,47 +719,10 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
         {
             if(! isValidIndex(_caretPosition)) { return; }
             
-            if(Clipboard.generalClipboard.hasFormat(FEATURED_SEQUENCE_CLIPBOARD_KEY)) {
-                var clipboardObject:Object = Clipboard.generalClipboard.getData(FEATURED_SEQUENCE_CLIPBOARD_KEY);
+            if(Clipboard.generalClipboard.hasFormat(ClipboardFormats.TEXT_FORMAT)) {
+                var pasteSequence:String = String(Clipboard.generalClipboard.getData(ClipboardFormats.TEXT_FORMAT, ClipboardTransferMode.CLONE_ONLY)).toLowerCase();
                 
-                if(clipboardObject != null) {
-                    /*var pasteFeaturedSequence:FeaturedSequence = clipboardObject as FeaturedSequence;
-                    var pasteSequence1:String = pasteFeaturedSequence.sequence.seqString();
-                    
-                    if(!SequenceUtils.isCompatibleSequence(pasteSequence1)) {
-                        showInvalidPasteSequenceAlert();
-                        
-                        return;
-                    } else {
-                        pasteSequence1 = SequenceUtils.purifyCompatibleSequence(pasteSequence1);
-                    }
-                    
-                    if(_safeEditing) {
-                        doInsertFeaturedSequence(pasteFeaturedSequence, _caretPosition);
-                    } else {
-                        _featuredSequence.insertFeaturedSequence(pasteFeaturedSequence, _caretPosition);
-                        
-                        tryMoveCaretToPosition(_caretPosition + pasteSequence1.length);
-                    }*/
-                }
-            } else if(Clipboard.generalClipboard.hasFormat(ClipboardFormats.TEXT_FORMAT)) {
-                /*var pasteSequence2:String = String(Clipboard.generalClipboard.getData(ClipboardFormats.TEXT_FORMAT, ClipboardTransferMode.CLONE_ONLY)).toUpperCase();
-                
-                if(!SequenceUtils.isCompatibleSequence(pasteSequence2)) {
-                    showInvalidPasteSequenceAlert();
-                    
-                    return;
-                } else {
-                    pasteSequence2 = SequenceUtils.purifyCompatibleSequence(pasteSequence2);
-                }
-                
-                if(_safeEditing) {
-                    doInsertSequence(new DNASequence(pasteSequence2), _caretPosition);
-                } else {
-                    _featuredSequence.insertSequence(new DNASequence(pasteSequence2), _caretPosition);
-                    
-                    tryMoveCaretToPosition(_caretPosition + pasteSequence2.length);
-                }*/
+                sequenceProvider.insertSequence(new DNASequence(DNATools.createDNA(pasteSequence)), _caretPosition);
             }
         }
         
@@ -780,7 +735,7 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
         
         private function onKeyDown(event:KeyboardEvent):void
         {
-            var keyCharacter:String = String.fromCharCode(event.charCode).toUpperCase();
+            var keyCharacter:String = String.fromCharCode(event.charCode).toLowerCase();
             
             if(event.shiftKey && !shiftKeyDown) {
                 shiftDownCaretPosition = _caretPosition;
@@ -821,53 +776,33 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
                     tryMoveCaretToPosition(_caretPosition + numberOfVisibleRows * _bpPerRow);
                 }
             } else if(!event.ctrlKey && !event.altKey && _caretPosition != -1) {
-                /*if(SequenceUtils.SYMBOLS.indexOf(keyCharacter) >= 0) {
-                    if(_safeEditing) {
-                        doInsertSequence(new DNASequence(keyCharacter), _caretPosition);
-                    } else {
-                        _featuredSequence.insertSequence(new DNASequence(keyCharacter), _caretPosition);
-                        
-                        tryMoveCaretToPosition(_caretPosition + 1);
-                    }
+                if(DNAAlphabet.instance.symbolByValue(keyCharacter) != null) {
+                    _sequenceProvider.insertSequence(new DNASequence(DNATools.createDNA(keyCharacter)), _caretPosition);
+                    
+                    tryMoveCaretToPosition(_caretPosition + 1);
                 } else if(event.keyCode == Keyboard.DELETE) {
                     if(selectionLayer.selected) {
-                        if(_safeEditing) {
-                            doDeleteSequence(selectionLayer.start, selectionLayer.end);
-                        } else {
-                            _featuredSequence.removeSequence(selectionLayer.start, selectionLayer.end);
-                            
-                            tryMoveCaretToPosition(selectionLayer.start);
-                            
-                            deselect();
-                        }
+                        _sequenceProvider.deleteSequence(selectionLayer.start, selectionLayer.end - selectionLayer.start + 1);
+                        
+                        tryMoveCaretToPosition(selectionLayer.start);
+                        
+                        deselect();
                     } else {
-                        if(_safeEditing) {
-                            doDeleteSequence(_caretPosition, _caretPosition + 1);
-                        } else {
-                            _featuredSequence.removeSequence(_caretPosition, _caretPosition + 1);
-                        }
+                        _sequenceProvider.deleteSequence(_caretPosition, 1);
                     }
                 } else if(event.keyCode == Keyboard.BACKSPACE && _caretPosition > 0) {
                     if(selectionLayer.selected) {
-                        if(_safeEditing) {
-                            doDeleteSequence(selectionLayer.start, selectionLayer.end);
-                        } else {
-                            _featuredSequence.removeSequence(selectionLayer.start, selectionLayer.end);
-                            
-                            tryMoveCaretToPosition(selectionLayer.start);
-                            
-                            deselect();
-                        }
+                        _sequenceProvider.deleteSequence(selectionLayer.start, selectionLayer.end - selectionLayer.start + 1);
+                        
+                        tryMoveCaretToPosition(selectionLayer.start);
+                        
+                        deselect();
                     } else {
-                        if(_safeEditing) {
-                            doDeleteSequence(_caretPosition - 1, _caretPosition);
-                        } else {
-                            _featuredSequence.removeSequence(_caretPosition - 1, _caretPosition);
-                            
-                            tryMoveCaretToPosition(_caretPosition - 1);
-                        }
+                        _sequenceProvider.deleteSequence(_caretPosition - 1, 1);
+                        
+                        tryMoveCaretToPosition(_caretPosition - 1);
                     }
-                }*/
+                }
             }
             
             if(shiftKeyDown) {
@@ -907,36 +842,22 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
             }
         }
         
-        private function onEditFeatureMenuItem(event:ContextMenuEvent):void
-        {
-            /*if(event.mouseTarget is FeatureRenderer) {
-                dispatchEvent(new CommonEvent(CommonEvent.EDIT_FEATURE, true, true, (event.mouseTarget as FeatureRenderer).feature));
-            }*/
-        }
-        
-        private function onRemoveFeatureMenuItem(event:ContextMenuEvent):void
-        {
-            /*if(event.mouseTarget is FeatureRenderer) {
-                dispatchEvent(new CommonEvent(CommonEvent.REMOVE_FEATURE, true, true, (event.mouseTarget as FeatureRenderer).feature));
-            }*/
-        }
-        
-        private function onSelectedAsNewFeatureMenuItem(event:ContextMenuEvent):void
-        {
-            //dispatchEvent(new CommonEvent(CommonEvent.CREATE_FEATURE, true, true, new Feature(selectionLayer.start, selectionLayer.end)));
-        }
-        
         private function onContextMenuSelect(event:ContextMenuEvent):void
         {
-            customContextMenu.customItems = new Array();
-            
-            /*if(event.mouseTarget is FeatureRenderer) {
-                customContextMenu.customItems.push(editFeatureContextMenuItem);
-                customContextMenu.customItems.push(removeFeatureContextMenuItem);
-            }*/
-            
-            if(selectionLayer.selected) {
-                customContextMenu.customItems.push(selectedAsNewFeatureContextMenuItem);
+            if(renderers.length > 0) {
+                customContextMenu.customItems = new Array();
+                
+                for(var i:int = 0; i < renderers.length; i++) {
+                    var renderer:AnnotationRenderer = renderers[i] as AnnotationRenderer;
+                    
+                    var customMenus:Vector.<ContextMenuItem> = renderer.getContextMenuItems((event.mouseTarget is AnnotationItem) ? (event.mouseTarget as AnnotationItem) : null);
+                    
+                    if(customMenus && customMenus.length > 0) {
+                        for(var j:int = 0; j < customMenus.length; j++) {
+                            customContextMenu.customItems.push(customMenus[j]);
+                        }
+                    }
+                }
             }
         }
         
@@ -989,22 +910,6 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
             contextMenu = customContextMenu;
             
             customContextMenu.addEventListener(ContextMenuEvent.MENU_SELECT, onContextMenuSelect);
-            
-            if(! _readOnly) {
-                createCustomContextMenuItems();
-            }
-        }
-        
-        private function createCustomContextMenuItems():void
-        {
-            editFeatureContextMenuItem = new ContextMenuItem("Edit Feature");
-            editFeatureContextMenuItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onEditFeatureMenuItem);
-            
-            removeFeatureContextMenuItem = new ContextMenuItem("Remove Feature");
-            removeFeatureContextMenuItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onRemoveFeatureMenuItem);
-            
-            selectedAsNewFeatureContextMenuItem = new ContextMenuItem("Selected as New Feature");
-            selectedAsNewFeatureContextMenuItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onSelectedAsNewFeatureMenuItem);
         }
         
         private function createSelectionLayer():void
@@ -1147,7 +1052,7 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
             caret.caretHeight = _showRevComplement ? 2 * sequenceRenderer.sequenceSymbolRenderer.textHeight : sequenceRenderer.sequenceSymbolRenderer.textHeight;
         }
         
-        public function isValidIndex(index:int):Boolean
+        private function isValidIndex(index:int):Boolean
         {
             return index >= 0 && index <= _sequenceProvider.length;
         }

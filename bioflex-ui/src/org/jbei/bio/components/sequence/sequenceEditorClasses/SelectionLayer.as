@@ -11,8 +11,8 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
      */
     public class SelectionLayer extends UIComponent
     {
-        private const SELECTION_COLOR:int = 0x0099FF;
-        private const SELECTION_TRANSPARENCY:Number = 0.3;
+        public const SELECTION_COLOR:int = 0x0099FF;
+        public const SELECTION_TRANSPARENCY:Number = 0.3;
         
         private var leftHandle:SelectionHandle;
         private var rightHandle:SelectionHandle;

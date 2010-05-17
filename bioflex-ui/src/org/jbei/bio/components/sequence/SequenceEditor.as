@@ -121,6 +121,10 @@ package org.jbei.bio.components.sequence
             sequenceProviderChanged = true;
             
             invalidateProperties();
+            
+            if(_sequenceProvider) {
+                _sequenceProvider.addEventListener(SequenceProviderEvent.SEQUENCE_CHANGED, onSequenceProviderChanged);
+            }
         }
         
         public function get floatingWidth():Boolean
@@ -524,6 +528,13 @@ package org.jbei.bio.components.sequence
             if(focusManager.getFocus() != this) {
                 focusManager.setFocus(this);
             }
+        }
+        
+        private function onSequenceProviderChanged(event:SequenceProviderEvent):void
+        {
+            sequenceProviderChanged = true;
+            
+            invalidateProperties();
         }
         
         // Private Methods
