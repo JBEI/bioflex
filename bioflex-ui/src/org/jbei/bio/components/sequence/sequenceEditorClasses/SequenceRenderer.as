@@ -58,14 +58,14 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
             return _totalWidth;
         }
         
-        public function get sequenceSymbolRenderer():SymbolRenderer
+        public function get symbolWidth():int
         {
-            return _sequenceSymbolRenderer;
+            return _sequenceSymbolRenderer.textWidth;
         }
         
-        public function get revComSymbolRenderer():SymbolRenderer
+        public function get symbolHeight():int
         {
-            return _revComSymbolRenderer;
+            return _sequenceSymbolRenderer.textHeight;
         }
         
         public function get sequenceFontSize():int
@@ -158,7 +158,7 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
             }
         }
         
-        // Private Methods
+        // Event Handlers
         private function onRollOver(event:MouseEvent):void
         {
             Mouse.cursor = MouseCursor.IBEAM;
@@ -173,6 +173,7 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
             Mouse.cursor = MouseCursor.AUTO;
         }
         
+        // Private Methods
         private function initializeProperties():void
         {
             sequenceFontColor = contentHolder.sequenceFontColor;
@@ -266,6 +267,15 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
                 var sequenceStringLength:int = sequenceString.length;
                 
                 var sequenceX:Number = contentHolder.showLineNumbers ? 6 * _sequenceSymbolRenderer.textWidth : _sequenceSymbolRenderer.textWidth;
+                
+                for(var ri:int = 0; ri < contentHolder.getRenderers().length; ri++) {
+                    var annotationRenderer:AnnotationRenderer = contentHolder.getRenderers()[ri] as AnnotationRenderer;
+                    
+                    _totalHeight += annotationRenderer.getRowHeight(row.index);
+                    
+                    annotationRenderer.setRenderingPoint(row.index, sequenceX, sequenceY);
+                }
+                
                 var sequenceY:Number = _totalHeight;
                 
                 // Sequence

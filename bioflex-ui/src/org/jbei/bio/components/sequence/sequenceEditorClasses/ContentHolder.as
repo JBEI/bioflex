@@ -371,10 +371,10 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
                     numberOfCharacters += int(numberOfCharacters / 10);
                 }
                 
-                var bpX:Number = row.sequenceMetrics.x + numberOfCharacters * sequenceRenderer.sequenceSymbolRenderer.textWidth;
+                var bpX:Number = row.sequenceMetrics.x + numberOfCharacters * sequenceRenderer.symbolWidth;
                 var bpY:Number = row.sequenceMetrics.y;
                 
-                resultMetrics = new Rectangle(bpX, bpY, sequenceRenderer.sequenceSymbolRenderer.textWidth, sequenceRenderer.sequenceSymbolRenderer.textHeight);
+                resultMetrics = new Rectangle(bpX, bpY, sequenceRenderer.symbolWidth, sequenceRenderer.symbolHeight);
             }
             
             return resultMetrics;
@@ -565,6 +565,12 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
                 
                 rowMapper.update();
                 doDeselect();
+                
+                for(var i:int = 0; i < renderers.length; i++) {
+                    var annotationRenderer:AnnotationRenderer = renderers[i] as AnnotationRenderer;
+                    
+                    annotationRenderer.update(_bpPerRow, _showLineNumbers, _showSpaceEvery10Bp, sequenceRenderer.symbolWidth);
+                }
             }
             
             if(needsMeasurement) {
@@ -885,7 +891,7 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
                 addChild(caret);
                 
                 // set caret height according to default sequence height
-                caret.caretHeight = _showRevComplement ? 2 * sequenceRenderer.sequenceSymbolRenderer.textHeight : sequenceRenderer.sequenceSymbolRenderer.textHeight;
+                caret.caretHeight = _showRevComplement ? 2 * sequenceRenderer.symbolHeight : sequenceRenderer.symbolHeight;
             }
         }
         
@@ -1034,12 +1040,12 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
             }
             
             if (caret.x > sequenceEditor.horizontalScrollPosition + sequenceEditor.width - 20) { // -20 vertical scroll adjustment
-                this.x = sequenceEditor.width - Math.min(caret.x + sequenceRenderer.sequenceSymbolRenderer.textWidth * 10, this.totalWidth) - 20; // shift to the right by 10bp width, -20 vertical scroll width adjustment 
+                this.x = sequenceEditor.width - Math.min(caret.x + sequenceRenderer.symbolWidth * 10, this.totalWidth) - 20; // shift to the right by 10bp width, -20 vertical scroll width adjustment 
                 if (sequenceEditor.horizontalScrollPosition != -this.x) {
                     sequenceEditor.horizontalScrollPosition = -this.x;
                 }
             } else if(caret.x < sequenceEditor.horizontalScrollPosition + 5) { // +5 to look pretty
-                this.x = -Math.max(0, caret.x - sequenceRenderer.sequenceSymbolRenderer.textWidth * 10); // shift to the left by 10bp width 
+                this.x = -Math.max(0, caret.x - sequenceRenderer.symbolWidth * 10); // shift to the left by 10bp width 
                 if (sequenceEditor.horizontalScrollPosition != -this.x) {
                     sequenceEditor.horizontalScrollPosition = -this.x;
                 }
@@ -1049,7 +1055,7 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
         private function adjustCaretSize():void
         {
             // set caret height according to default sequence height
-            caret.caretHeight = _showRevComplement ? 2 * sequenceRenderer.sequenceSymbolRenderer.textHeight : sequenceRenderer.sequenceSymbolRenderer.textHeight;
+            caret.caretHeight = _showRevComplement ? 2 * sequenceRenderer.symbolHeight : sequenceRenderer.symbolHeight;
         }
         
         private function isValidIndex(index:int):Boolean
@@ -1096,7 +1102,7 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
                     } else if(point.x > row.sequenceMetrics.x + row.sequenceMetrics.width) {
                         bpIndex += row.sequence.length;
                     } else {
-                        var numberOfCharactersFromBegining:int = Math.floor((point.x - row.sequenceMetrics.x + (sequenceRenderer.sequenceSymbolRenderer.textWidth - 1) / 2) / sequenceRenderer.sequenceSymbolRenderer.textWidth);
+                        var numberOfCharactersFromBegining:int = Math.floor((point.x - row.sequenceMetrics.x + (sequenceRenderer.symbolWidth - 1) / 2) / sequenceRenderer.symbolWidth);
                         
                         var numberOfSpaces:int = 0;
                         
@@ -1118,7 +1124,7 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
         
         private function updateFloatingBpPerRow():void
         {
-            var numberOfFittingBP:int = int((sequenceEditor.width - 30) / sequenceRenderer.sequenceSymbolRenderer.textWidth) - 7; // -30 for scrollbar and extra space, -7 for index
+            var numberOfFittingBP:int = int((sequenceEditor.width - 30) / sequenceRenderer.symbolWidth) - 7; // -30 for scrollbar and extra space, -7 for index
             
             var extraSpaces:int = showSpaceEvery10Bp ? int(numberOfFittingBP / 10) : 0;
             
