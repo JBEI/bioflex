@@ -45,6 +45,8 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
             
             needsRemeasurement = true;
             
+            delayTimer();
+            
             invalidateDisplayList();
         }
         
@@ -130,6 +132,13 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
         private function deactivateTimer():void
         {
             timer.stop();
+        }
+        
+        private function delayTimer():void
+        {
+            show();
+            
+            timer.delay = TIMER_REFRESH_SPEED;
         }
     }
 }
