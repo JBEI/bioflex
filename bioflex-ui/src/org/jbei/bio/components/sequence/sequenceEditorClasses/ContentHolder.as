@@ -22,7 +22,6 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
     import org.jbei.bio.components.sequence.SequenceEditor;
     import org.jbei.bio.components.sequence.SequenceProvider;
     import org.jbei.bio.components.sequence.common.CaretEvent;
-    import org.jbei.bio.components.sequence.common.IRenderer;
     import org.jbei.bio.components.sequence.common.SelectionEvent;
     import org.jbei.bio.sequence.DNATools;
     import org.jbei.bio.sequence.alphabets.DNAAlphabet;
@@ -38,8 +37,6 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
         public static const SPLIT_LINE_TRANSPARENCY:Number = 0.15;
         
         private var sequenceEditor:SequenceEditor;
-        private var renderers:Vector.<IRenderer> = new Vector.<IRenderer>();
-        private var renderersByName:Dictionary = new Dictionary() /* of [name] = IRenderer */;
         private var caret:Caret;
         private var selectionLayer:SelectionLayer;
         private var sequenceRenderer:SequenceRenderer;
@@ -389,45 +386,6 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
             return _rowMapper.rows[int(Math.floor(index / _bpPerRow))];
         }
         
-        public function getRenderers():Vector.<IRenderer>
-        {
-            return renderers;
-        }
-        
-        public function registerRenderer(name:String, renderer:IRenderer):void
-        {
-            if(renderersByName[name] != null) {
-                throw new Error("Failed to register renderer! Name should be unique.");
-            }
-            
-            renderers.push(renderer);
-            renderersByName[name] = renderer;
-        }
-        
-        public function unregisterRenderer(renderer:IRenderer):void
-        {
-            var index:int = renderers.indexOf(renderer);
-            
-            if(index == -1) {
-                throw new Error("Failed to unregister not registered renderer!");
-            }
-            
-            renderers.splice(index, 1);
-            
-            for(var name:String in renderersByName) {
-                if(renderer == renderersByName[name]) {
-                    renderersByName[name] = null;
-                    
-                    break;
-                }
-            }
-        }
-        
-        public function getRenderer(name:String):IRenderer
-        {
-            return renderersByName[name];
-        }
-        
         public function focusIn():void
         {
             caret.show();
@@ -565,12 +523,6 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
                 
                 rowMapper.update();
                 doDeselect();
-                
-                for(var i:int = 0; i < renderers.length; i++) {
-                    var annotationRenderer:AnnotationRenderer = renderers[i] as AnnotationRenderer;
-                    
-                    annotationRenderer.update(_bpPerRow, _showLineNumbers, _showSpaceEvery10Bp, sequenceRenderer.symbolWidth);
-                }
             }
             
             if(needsMeasurement) {
@@ -850,21 +802,7 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
         
         private function onContextMenuSelect(event:ContextMenuEvent):void
         {
-            if(renderers.length > 0) {
-                customContextMenu.customItems = new Array();
-                
-                for(var i:int = 0; i < renderers.length; i++) {
-                    var renderer:AnnotationRenderer = renderers[i] as AnnotationRenderer;
-                    
-                    var customMenus:Vector.<ContextMenuItem> = renderer.getContextMenuItems((event.mouseTarget is AnnotationItem) ? (event.mouseTarget as AnnotationItem) : null);
-                    
-                    if(customMenus && customMenus.length > 0) {
-                        for(var j:int = 0; j < customMenus.length; j++) {
-                            customContextMenu.customItems.push(customMenus[j]);
-                        }
-                    }
-                }
-            }
+            
         }
         
         // Private Methods

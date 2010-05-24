@@ -267,15 +267,6 @@ package org.jbei.bio.components.sequence.sequenceEditorClasses
                 var sequenceStringLength:int = sequenceString.length;
                 
                 var sequenceX:Number = contentHolder.showLineNumbers ? 6 * _sequenceSymbolRenderer.textWidth : _sequenceSymbolRenderer.textWidth;
-                
-                for(var ri:int = 0; ri < contentHolder.getRenderers().length; ri++) {
-                    var annotationRenderer:AnnotationRenderer = contentHolder.getRenderers()[ri] as AnnotationRenderer;
-                    
-                    _totalHeight += annotationRenderer.getRowHeight(row.index);
-                    
-                    annotationRenderer.setRenderingPoint(row.index, sequenceX, sequenceY);
-                }
-                
                 var sequenceY:Number = _totalHeight;
                 
                 // Sequence

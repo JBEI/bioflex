@@ -11,7 +11,6 @@ package org.jbei.bio.components.sequence
     import mx.managers.IFocusManagerComponent;
     
     import org.jbei.bio.components.sequence.SequenceProvider;
-    import org.jbei.bio.components.sequence.common.IRenderer;
     import org.jbei.bio.components.sequence.common.PrintableContent;
     import org.jbei.bio.components.sequence.sequenceEditorClasses.ContentHolder;
 
@@ -279,11 +278,6 @@ package org.jbei.bio.components.sequence
             return contentHolder.selectionEnd;
         }
         
-        public final function get renderers():Vector.<IRenderer>
-        {
-            return contentHolder.getRenderers();
-        }
-        
         // Public Methods
         public function select(start:int, end:int):void
         {
@@ -309,21 +303,6 @@ package org.jbei.bio.components.sequence
             }
             
             return printableContent;
-        }
-        
-        public function registerRenderer(name:String, renderer:IRenderer):void
-        {
-            contentHolder.registerRenderer(name, renderer);
-        }
-        
-        public function unregisterRenderer(renderer:IRenderer):void
-        {
-            contentHolder.unregisterRenderer(renderer);
-        }
-        
-        public function getRenderer(name:String):IRenderer
-        {
-            return contentHolder.getRenderer(name);
         }
         
         // Protected Methods
