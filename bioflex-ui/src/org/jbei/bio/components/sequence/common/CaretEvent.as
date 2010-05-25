@@ -10,14 +10,14 @@ package org.jbei.bio.components.sequence.common
         public var position:int = -1;
         
         // Static Constants
-        public static const CARET_POSITION_CHANGED:String = "CaretPositionChanged";
+        public static const CARET_POSITION_CHANGED:String = "caretPositionChanged";
         
         // Constructor
         public function CaretEvent(type:String, position:int)
         {
             this.position = position;
             
-            super(type, true, true);
+            super(type, true, false);
         }
     }
 }

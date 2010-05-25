@@ -11,7 +11,7 @@ package org.jbei.bio.components.sequence.common
         public var end:int;
         
         // Static Constants
-        public static const SELECTION_CHANGED:String = "SelectionChanged";
+        public static const SELECTION_CHANGED:String = "selectionChanged";
         
         // Constructor
         public function SelectionEvent(type:String, start:int, end:int)
@@ -19,7 +19,7 @@ package org.jbei.bio.components.sequence.common
             this.start = start;
             this.end = end;
             
-            super(type, true, true);
+            super(type, true, false);
         }
     }
 }
