@@ -6,21 +6,34 @@ package org.jbei.bio.sequence.common
     /**
      * @author Zinovii Dmytriv
      */
+    [RemoteClass(alias="org.jbei.bio.sequence.common.SymbolList")]
     public class SymbolList
     {
         private var _symbols:Vector.<ISymbol>;
         private var _alphabet:IAlphabet;
         
         // Constructor
-        public function SymbolList(symbols:Vector.<ISymbol>, alphabet:IAlphabet)
+        public function SymbolList(symbols:Vector.<ISymbol> = null, alphabet:IAlphabet = null)
         {
             _symbols = symbols;
             _alphabet = alphabet;
         }
         
         // Properties
+        public function get symbols():Vector.<ISymbol> {
+            return _symbols;
+        }
+        
+        public function set symbols(value:Vector.<ISymbol>) {
+            _symbols = value;
+        }
+        
         public function get alphabet():IAlphabet {
             return _alphabet;
+        }
+        
+        public function set alphabet(value:IAlphabet) {
+            _alphabet = value;
         }
         
         public function get length():int {

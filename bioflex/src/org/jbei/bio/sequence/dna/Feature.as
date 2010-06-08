@@ -5,13 +5,9 @@ package org.jbei.bio.sequence.dna
     /**
      * @author Zinovii Dmytriv
      */
+    [RemoteClass(alias="org.jbei.bio.sequence.dna.Feature")]
     public class Feature extends StrandedAnnotation
     {
-        // Static Constants
-        public static const POSITIVE:int = 1;
-        public static const NEGATIVE:int = -1;
-        public static const UNKNOWN:int = 0;
-        
         private var _name:String;
         private var _type:String;
         private var _notes:Vector.<FeatureNote>;

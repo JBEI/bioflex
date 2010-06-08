@@ -6,6 +6,7 @@ package org.jbei.bio.orf
     /**
      * @author Zinovii Dmytriv
      */
+    [RemoteClass(alias="org.jbei.bio.orf.ORF")]
     public class ORF extends StrandedAnnotation
     {
         private var _frame:int;

@@ -3,13 +3,14 @@ package org.jbei.bio.sequence.dna
     /**
      * @author Zinovii Dmytriv
      */
+    [RemoteClass(alias="org.jbei.bio.sequence.dna.FeatureNote")]
     public class FeatureNote
     {
         private var _name:String;
         private var _value:String;
         
         // Constructor
-        public function FeatureNote(name:String, value:String)
+        public function FeatureNote(name:String = "", value:String = "")
         {
             _name = name;
             _value = value;

@@ -3,6 +3,7 @@ package org.jbei.bio.sequence.common
     /**
      * @author Zinovii Dmytriv
      */
+    [RemoteClass(alias="org.jbei.bio.sequence.common.Annotation")]
     public class Annotation implements IAnnotation
     {
         private var _start:int = 0;

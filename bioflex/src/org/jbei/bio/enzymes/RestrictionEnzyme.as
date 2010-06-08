@@ -3,6 +3,7 @@ package org.jbei.bio.enzymes
     /**
      * @author Zinovii Dmytriv
      */
+    [RemoteClass(alias="org.jbei.bio.sequence.dna.RestrictionEnzyme")]
     public class RestrictionEnzyme
     {
         private var _name:String;

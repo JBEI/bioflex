@@ -3,6 +3,7 @@ package org.jbei.bio.sequence.common
     /**
      * @author Zinovii Dmytriv
      */
+    [RemoteClass(alias="org.jbei.bio.sequence.common.StrandedAnnotation")]
     public class StrandedAnnotation extends Annotation
     {
         private var _strand:int = StrandType.FORWARD;
