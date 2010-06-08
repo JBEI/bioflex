@@ -15,7 +15,7 @@ package org.jbei.bio.sequence.common
             _end = end;
         }
         
-        // 
+        // Properties
         public function get start():int
         {
             return _start;
@@ -33,7 +33,27 @@ package org.jbei.bio.sequence.common
         
         public function set end(value:int):void
         {
-            _start = value;
+            _end = value;
+        }
+        
+        // Public Methods
+        public function contains(annotation:Annotation):Boolean
+        {
+            var result:Boolean = false;
+            
+            if(_start <= _end) { // segment1 non-circular
+                if(annotation.start <= annotation.end) { // segment2 non-circular 
+                    result = ((_start <= annotation.start) && (_end >= annotation.end)); 
+                }
+            } else { // segment1 circular
+                if(annotation.start <= annotation.end) { // segment2 non-circular
+                    result = ((annotation.end <= _end) || (annotation.start >= _start));
+                } else { // segment1 circular
+                    result = ((_start <= annotation.start) && (_end >= annotation.end));
+                }
+            }
+            
+            return result;
         }
     }
 }

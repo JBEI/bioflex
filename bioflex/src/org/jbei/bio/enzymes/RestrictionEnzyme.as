@@ -16,7 +16,7 @@ package org.jbei.bio.enzymes
         private var _usReverse:int;
         
         // Constructor
-        public function RestrictionEnzyme(name:String, site:String, cutType:int, forwardRegex:String, reverseRegex:String, dsForward:int, dsReverse:int, usForward:int, usReverse:int)
+        public function RestrictionEnzyme(name:String = "", site:String = "", cutType:int = 0, forwardRegex:String = "", reverseRegex:String = "", dsForward:int = 0, dsReverse:int = 0, usForward:int = 0, usReverse:int = 0)
         {
             _name = name;
             _site = site;

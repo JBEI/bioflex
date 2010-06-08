@@ -8,6 +8,7 @@ package org.jbei.bio.enzymes
     public class RestrictionCutSite extends StrandedAnnotation
     {
         private var _restrictionEnzyme:RestrictionEnzyme;
+        private var _numCuts:int = 0;
         
         // Constructor
         public function RestrictionCutSite(start:int, end:int, strand:int, restrictionEnzyme:RestrictionEnzyme)
@@ -26,6 +27,16 @@ package org.jbei.bio.enzymes
         public function set restrictionEnzyme(value:RestrictionEnzyme):void
         {
             _restrictionEnzyme = value;
+        }
+        
+        public function get numCuts():int
+        {
+            return _numCuts;
+        }
+        
+        public function set numCuts(value:int):void
+        {
+            _numCuts = value;
         }
     }
 }

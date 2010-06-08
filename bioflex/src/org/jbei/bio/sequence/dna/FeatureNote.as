@@ -35,5 +35,11 @@ package org.jbei.bio.sequence.dna
         {
             _value = data;
         }
+        
+        // Public Methods
+        public function clone():FeatureNote
+        {
+            return new FeatureNote(_name, _value);
+        }
     }
 }

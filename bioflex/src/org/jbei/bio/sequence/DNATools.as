@@ -34,7 +34,7 @@ package org.jbei.bio.sequence
         }
         
         /* @throws org.jbei.bio.exceptions.IllegalSymbolException */
-        public static function createDNASequence(name:String, dnaSequence:String):Sequence
+        public static function createDNASequence(name:String, dnaSequence:String):DNASequence
         {
             return new DNASequence(createDNA(dnaSequence), name);
         }
@@ -106,7 +106,7 @@ package org.jbei.bio.sequence
             if(symbols.length > 0) {
                 var length:int = symbols.length;
                 
-                for(var i:int = length - 1; i >= 0; i--) {
+                for(var i:int = length; i > 0; i--) {
                     reverseComplementSymbols.push(complementSymbol(symbols[length - i]));
                 }
             }

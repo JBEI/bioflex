@@ -7,12 +7,17 @@ package org.jbei.bio.sequence.dna
      */
     public class Feature extends StrandedAnnotation
     {
+        // Static Constants
+        public static const POSITIVE:int = 1;
+        public static const NEGATIVE:int = -1;
+        public static const UNKNOWN:int = 0;
+        
         private var _name:String;
         private var _type:String;
         private var _notes:Vector.<FeatureNote>;
         
         // Constructor
-        public function Feature(name:String, start:int, end:int, type:String, strand:int, notes:Vector.<FeatureNote> = null)
+        public function Feature(name:String = "", start:int = 0, end:int = 0, type:String = "", strand:int = 0, notes:Vector.<FeatureNote> = null)
         {
             super(start, end, strand);
             
@@ -50,6 +55,24 @@ package org.jbei.bio.sequence.dna
         public function set notes(value:Vector.<FeatureNote>):void
         {
             _notes = value;
+        }
+        
+        // Public Methods
+        public function clone():Feature
+        {
+            var clonedFeature:Feature = new Feature(_name, start, end, _type, strand);
+            
+            if(_notes && _notes.length > 0) {
+                var clonedNotes:Vector.<FeatureNote> = new Vector.<FeatureNote>();
+                
+                for(var i:int = 0; i < _notes.length; i++) {
+                    clonedNotes.push((_notes[i] as FeatureNote).clone());
+                }
+                
+                clonedFeature._notes = clonedNotes;
+            }
+            
+            return clonedFeature;
         }
     }
 }
