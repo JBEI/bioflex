@@ -172,9 +172,9 @@ package org.jbei.bio.orf
                 return true;
             }
             
-            var n1:Vector.<ISymbol> = (nucleotide1 as NucleotideSymbol).ambiguousMatches;
-            var n2:Vector.<ISymbol> = (nucleotide2 as NucleotideSymbol).ambiguousMatches;
-            var n3:Vector.<ISymbol> = (nucleotide3 as NucleotideSymbol).ambiguousMatches;
+            var n1:Vector.<ISymbol> = (nucleotide1 as NucleotideSymbol).ambiguousMatches ? (nucleotide1 as NucleotideSymbol).ambiguousMatches : Vector.<ISymbol>([nucleotide1]);
+            var n2:Vector.<ISymbol> = (nucleotide2 as NucleotideSymbol).ambiguousMatches ? (nucleotide2 as NucleotideSymbol).ambiguousMatches : Vector.<ISymbol>([nucleotide2]);
+            var n3:Vector.<ISymbol> = (nucleotide3 as NucleotideSymbol).ambiguousMatches ? (nucleotide3 as NucleotideSymbol).ambiguousMatches : Vector.<ISymbol>([nucleotide3]);
             
             for(var i1:int = 0; i1 < n1.length; i1++) {
                 for(var i2:int = 0; i2 < n2.length; i2++) {
