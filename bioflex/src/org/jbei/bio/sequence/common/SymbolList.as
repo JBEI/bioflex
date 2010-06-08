@@ -13,27 +13,15 @@ package org.jbei.bio.sequence.common
         private var _alphabet:IAlphabet;
         
         // Constructor
-        public function SymbolList(symbols:Vector.<ISymbol> = null, alphabet:IAlphabet = null)
+        public function SymbolList(symbols:Vector.<ISymbol>, alphabet:IAlphabet)
         {
             _symbols = symbols;
             _alphabet = alphabet;
         }
         
         // Properties
-        public function get symbols():Vector.<ISymbol> {
-            return _symbols;
-        }
-        
-        public function set symbols(value:Vector.<ISymbol>) {
-            _symbols = value;
-        }
-        
         public function get alphabet():IAlphabet {
             return _alphabet;
-        }
-        
-        public function set alphabet(value:IAlphabet) {
-            _alphabet = value;
         }
         
         public function get length():int {
