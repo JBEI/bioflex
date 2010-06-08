@@ -87,13 +87,13 @@ package org.jbei.bio.orf
                 
                 possibleStopCodon = false;
                 
-                if(aaSymbol == ProteinAlphabet.instance.gap && !isStartCodon(n1, n2, n3)) {
+                if(aaSymbol == ProteinAlphabet.instance.gap && !TranslationUtils.isStartCodon(n1, n2, n3)) {
                     if(evaluatePossibleStop(n1, n2, n3)) {
                         possibleStopCodon = true;
                     }
                 }
                 
-                if(!possibleStopCodon && isStartCodon(n1, n2, n3)) {
+                if(!possibleStopCodon && TranslationUtils.isStartCodon(n1, n2, n3)) {
                     if(startIndex == -1) {
                         startIndex = index;
                     }
@@ -108,7 +108,7 @@ package org.jbei.bio.orf
                     continue;
                 }
                 
-                if(possibleStopCodon || isStopCodon(n1, n2, n3)) {
+                if(possibleStopCodon || TranslationUtils.isStopCodon(n1, n2, n3)) {
                     if(startIndex != -1) {
                         endIndex = index + 2;
                         if(minimumLength == -1 || (Math.abs(endIndex - startIndex) + 1 >= minimumLength)) {
@@ -135,37 +135,6 @@ package org.jbei.bio.orf
             return orfs;
         }
         
-        private static function isStartCodon(nucleotide1:ISymbol, nucleotide2:ISymbol, nucleotide3:ISymbol):Boolean
-        {
-            var result:Boolean = false;
-            
-            if(nucleotide1 is GapSymbol || nucleotide2 is GapSymbol || nucleotide3 is GapSymbol) {
-                return result;
-            }
-            
-            var triplet:String = nucleotide1.value + nucleotide2.value + nucleotide3.value;
-            
-            return (triplet == 'atg' || triplet == 'aug');
-        }
-        
-        private static function isStopCodon(nucleotide1:ISymbol, nucleotide2:ISymbol, nucleotide3:ISymbol):Boolean
-        {
-            var result:Boolean = false;
-            
-            if(nucleotide1 is GapSymbol || nucleotide2 is GapSymbol || nucleotide3 is GapSymbol) {
-                return result;
-            }
-            
-            var triplet:String = nucleotide1.value + nucleotide2.value + nucleotide3.value;
-            
-            return (triplet == 'taa'
-                || triplet == 'tag'
-                || triplet == 'tga'
-                || triplet == 'uaa'
-                || triplet == 'uag'
-                || triplet == 'uga');
-        }
-        
         private static function evaluatePossibleStop(nucleotide1:ISymbol, nucleotide2:ISymbol, nucleotide3:ISymbol):Boolean
         {
             if(nucleotide1 is GapSymbol || nucleotide2 is GapSymbol || nucleotide3 is GapSymbol) {
@@ -181,7 +150,7 @@ package org.jbei.bio.orf
                     for(var i3:int = 0; i3 < n3.length; i3++) {
                         var testCodon:String = n1[i1] + n2[i2] + n3[i3];
                         
-                        if(isStopCodon(n1[i1], n2[i2], n3[i3])) {
+                        if(TranslationUtils.isStopCodon(n1[i1], n2[i2], n3[i3])) {
                             return true;
                         }
                     }

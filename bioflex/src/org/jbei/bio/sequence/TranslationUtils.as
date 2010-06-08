@@ -150,6 +150,38 @@ package org.jbei.bio.sequence
             return new SymbolList(proteinSymbols, proteinAlphabet);
         }
         
+        public static function isStartCodon(nucleotide1:ISymbol, nucleotide2:ISymbol, nucleotide3:ISymbol):Boolean
+        {
+            var result:Boolean = false;
+            
+            if(nucleotide1 is GapSymbol || nucleotide2 is GapSymbol || nucleotide3 is GapSymbol) {
+                return result;
+            }
+            
+            var triplet:String = nucleotide1.value + nucleotide2.value + nucleotide3.value;
+            
+            return (triplet == 'atg' || triplet == 'aug');
+        }
+        
+        public static function isStopCodon(nucleotide1:ISymbol, nucleotide2:ISymbol, nucleotide3:ISymbol):Boolean
+        {
+            var result:Boolean = false;
+            
+            if(nucleotide1 is GapSymbol || nucleotide2 is GapSymbol || nucleotide3 is GapSymbol) {
+                return result;
+            }
+            
+            var triplet:String = nucleotide1.value + nucleotide2.value + nucleotide3.value;
+            
+            return (triplet == 'taa'
+                || triplet == 'tag'
+                || triplet == 'tga'
+                || triplet == 'uaa'
+                || triplet == 'uag'
+                || triplet == 'uga');
+        }
+        
+        // Private Methods
         private static function initializeAminoAcidsTranslationTable():void
         {
             if(aminoAcidsTranslationTable != null) {
