@@ -107,7 +107,7 @@ package org.jbei.bio.sequence
                 var length:int = symbols.length;
                 
                 for(var i:int = length; i > 0; i--) {
-                    reverseComplementSymbols.push(complementSymbol(symbols[length - i]));
+                    reverseComplementSymbols.push(complementSymbol(symbols[i - 1]));
                 }
             }
             

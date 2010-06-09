@@ -42,14 +42,14 @@ package org.jbei.bio.sequence.common
         {
             var result:Boolean = false;
             
-            if(_start <= _end) { // segment1 non-circular
-                if(annotation.start <= annotation.end) { // segment2 non-circular 
+            if(_start <= _end) { // annotation1 non-circular
+                if(annotation.start <= annotation.end) { // annotation2 non-circular 
                     result = ((_start <= annotation.start) && (_end >= annotation.end)); 
                 }
-            } else { // segment1 circular
-                if(annotation.start <= annotation.end) { // segment2 non-circular
+            } else { // annotation1 circular
+                if(annotation.start <= annotation.end) { // annotation2 non-circular
                     result = ((annotation.end <= _end) || (annotation.start >= _start));
-                } else { // segment1 circular
+                } else { // annotation1 circular
                     result = ((_start <= annotation.start) && (_end >= annotation.end));
                 }
             }
