@@ -1,0 +1,2 @@
+#!/bin/sh
+/home/zenyk/Applications/Adobe\ Flex\ SDK/3.5/bin/asdoc -target-player="10.0.42" -locale en_US -source-path /home/zenyk/workspace/Projects/Flex/BioFlex/src/ -source-path /home/zenyk/workspace/Projects/Flex/BioFlexUI/src/ -doc-sources /home/zenyk/workspace/Projects/Flex/BioFlex/src/ -main-title "BioFlex API" -window-title "BioFlex API" -output /home/zenyk/workspace/Projects/Flex/BioFlex/docs/api/

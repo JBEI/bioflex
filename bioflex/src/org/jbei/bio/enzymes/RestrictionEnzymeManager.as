@@ -8,10 +8,10 @@ package org.jbei.bio.enzymes
     public class RestrictionEnzymeManager
     {
         [Embed("assets/rebase.xml", mimeType="application/octet-stream")]
-        private static const RebaseEnzymesXML:Class;
+        private static var RebaseEnzymesXML:Class;
         
         [Embed("assets/common.xml", mimeType="application/octet-stream")]
-        private static const CommonEnzymesXML:Class;
+        private static var CommonEnzymesXML:Class;
         
         private static var _instance:RestrictionEnzymeManager = null;
         
