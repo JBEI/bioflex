@@ -3,7 +3,11 @@ package org.jbei.bio.sequence.alphabets
     import org.jbei.bio.sequence.symbols.GapSymbol;
     import org.jbei.bio.sequence.symbols.ISymbol;
     import org.jbei.bio.sequence.symbols.NucleotideSymbol;
-
+    
+    /**
+     * @author Zinovii Dmytriv
+     */
+    [RemoteClass(alias="org.jbei.bio.sequence.alphabets.DNAAlphabet")]
     public class DNAAlphabet extends AbstractAlphabet
     {
         private static var _instance:DNAAlphabet = null;

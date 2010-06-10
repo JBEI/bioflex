@@ -62,7 +62,7 @@ package org.jbei.bio.sequence
         /* @throws org.jbei.bio.exceptions.IllegalSymbolException */
         public static function dnaToRNA(symbolList:SymbolList):SymbolList
         {
-            var symbols:Vector.<ISymbol> = symbolList.symbols();
+            var symbols:Vector.<ISymbol> = symbolList.symbols;
             var rnaSymbols:Vector.<ISymbol> = new Vector.<ISymbol>(symbols.length, true);
             
             var length:int = symbols.length;
@@ -79,7 +79,7 @@ package org.jbei.bio.sequence
         /* @throws org.jbei.bio.exceptions.IllegalSymbolException */
         public static function rnaToDNA(symbolList:SymbolList):SymbolList
         {
-            var symbols:Vector.<ISymbol> = symbolList.symbols();
+            var symbols:Vector.<ISymbol> = symbolList.symbols;
             var dnaSymbols:Vector.<ISymbol> = new Vector.<ISymbol>(symbols.length, true);
             
             var length:int = symbols.length;
@@ -141,7 +141,7 @@ package org.jbei.bio.sequence
             
             var proteinSymbols:Vector.<ISymbol> = new Vector.<ISymbol>(length / 3, true);
             
-            var symbols:Vector.<ISymbol> = symbolList.symbols();
+            var symbols:Vector.<ISymbol> = symbolList.symbols;
             
             for(var i:int = 0; i < length; i += 3) {
                 proteinSymbols[i / 3] = rnaToProteinSymbol(symbols[i], symbols[i + 1], symbols[i + 2]);

@@ -13,7 +13,7 @@ package org.jbei.bio.sequence.common
         {
             _name = name;
             
-            super(symbolList.symbols(), symbolList.alphabet);
+            super(symbolList.symbols, symbolList.alphabet);
         }
         
         // Properties

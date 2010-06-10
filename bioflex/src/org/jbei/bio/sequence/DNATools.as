@@ -44,38 +44,38 @@ package org.jbei.bio.sequence
         {
             var dnaAlphabet:DNAAlphabet = DNAAlphabet.instance;
             
-            switch(symbol) {
-                case dnaAlphabet.a:
+            switch(symbol.value) {
+                case dnaAlphabet.a.value:
                     return dnaAlphabet.t;
-                case dnaAlphabet.t:
+                case dnaAlphabet.t.value:
                     return dnaAlphabet.a;
-                case dnaAlphabet.g:
+                case dnaAlphabet.g.value:
                     return dnaAlphabet.c;
-                case dnaAlphabet.c:
+                case dnaAlphabet.c.value:
                     return dnaAlphabet.g;
-                case dnaAlphabet.y:
+                case dnaAlphabet.y.value:
                     return dnaAlphabet.r;
-                case dnaAlphabet.r:
+                case dnaAlphabet.r.value:
                     return dnaAlphabet.y;
-                case dnaAlphabet.s:
+                case dnaAlphabet.s.value:
                     return dnaAlphabet.s;
-                case dnaAlphabet.w:
+                case dnaAlphabet.w.value:
                     return dnaAlphabet.w;
-                case dnaAlphabet.k:
+                case dnaAlphabet.k.value:
                     return dnaAlphabet.m;
-                case dnaAlphabet.m:
+                case dnaAlphabet.m.value:
                     return dnaAlphabet.k;
-                case dnaAlphabet.b:
+                case dnaAlphabet.b.value:
                     return dnaAlphabet.v;
-                case dnaAlphabet.v:
+                case dnaAlphabet.v.value:
                     return dnaAlphabet.b;
-                case dnaAlphabet.d:
+                case dnaAlphabet.d.value:
                     return dnaAlphabet.h;
-                case dnaAlphabet.h:
+                case dnaAlphabet.h.value:
                     return dnaAlphabet.d;
-                case dnaAlphabet.n:
+                case dnaAlphabet.n.value:
                     return dnaAlphabet.n;
-                case dnaAlphabet.gap:
+                case dnaAlphabet.gap.value:
                     return dnaAlphabet.gap;
                 default:
                     throw new IllegalSymbolException("Failed to find complement for symbol '" + symbol.value + "'");
@@ -85,7 +85,7 @@ package org.jbei.bio.sequence
         /* @throws org.jbei.bio.exceptions.IllegalSymbolException */
         public static function complement(symbolList:SymbolList):SymbolList
         {
-            var symbols:Vector.<ISymbol> = symbolList.symbols();
+            var symbols:Vector.<ISymbol> = symbolList.symbols;
             var complementSymbols:Vector.<ISymbol> = new Vector.<ISymbol>();
             
             if(symbols.length > 0) {
@@ -100,7 +100,7 @@ package org.jbei.bio.sequence
         /* @throws org.jbei.bio.exceptions.IllegalSymbolException */
         public static function reverseComplement(symbolList:SymbolList):SymbolList
         {
-            var symbols:Vector.<ISymbol> = symbolList.symbols();
+            var symbols:Vector.<ISymbol> = symbolList.symbols;
             var reverseComplementSymbols:Vector.<ISymbol> = new Vector.<ISymbol>();
             
             if(symbols.length > 0) {

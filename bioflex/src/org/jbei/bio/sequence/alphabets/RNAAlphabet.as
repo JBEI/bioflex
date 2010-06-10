@@ -4,6 +4,10 @@ package org.jbei.bio.sequence.alphabets
     import org.jbei.bio.sequence.symbols.ISymbol;
     import org.jbei.bio.sequence.symbols.NucleotideSymbol;
 
+    /**
+     * @author Zinovii Dmytriv
+     */
+    [RemoteClass(alias="org.jbei.bio.sequence.alphabets.RNAAlphabet")]
     public class RNAAlphabet extends AbstractAlphabet
     {
         private static var _instance:RNAAlphabet = null;

@@ -3,6 +3,10 @@ package org.jbei.bio.sequence.alphabets
     import org.jbei.bio.sequence.symbols.AminoAcidSymbol;
     import org.jbei.bio.sequence.symbols.GapSymbol;
 
+    /**
+     * @author Zinovii Dmytriv
+     */
+    [RemoteClass(alias="org.jbei.bio.sequence.alphabets.ProteinAlphabet")]
     public class ProteinAlphabet extends AbstractAlphabet
     {
         private static var _instance:ProteinAlphabet = null;

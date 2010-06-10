@@ -13,7 +13,7 @@ package org.jbei.bio.sequence.common
         private var _alphabet:IAlphabet;
         
         // Constructor
-        public function SymbolList(symbols:Vector.<ISymbol>, alphabet:IAlphabet)
+        public function SymbolList(symbols:Vector.<ISymbol> = null, alphabet:IAlphabet = null)
         {
             _symbols = symbols;
             _alphabet = alphabet;
@@ -22,6 +22,18 @@ package org.jbei.bio.sequence.common
         // Properties
         public function get alphabet():IAlphabet {
             return _alphabet;
+        }
+        
+        public function set alphabet(value:IAlphabet):void {
+            _alphabet = value;
+        }
+        
+        public function get symbols():Vector.<ISymbol> {
+            return _symbols;
+        }
+        
+        public function set symbols(value:Vector.<ISymbol>):void {
+            _symbols = value;
         }
         
         public function get length():int {
@@ -64,22 +76,9 @@ package org.jbei.bio.sequence.common
             _symbols.splice(0, _symbols.length);
         }
         
-        public function symbols():Vector.<ISymbol>
-        {
-            var clonedVector:Vector.<ISymbol> = new Vector.<ISymbol>();
-            
-            if(_symbols.length > 0) {
-                for(var i:int = 0; i < _symbols.length; i++) {
-                    clonedVector.push(_symbols[i]);
-                }
-            }
-            
-            return clonedVector;
-        }
-        
         public function addSymbols(newSymbols:SymbolList):void
         {
-            _symbols.concat(newSymbols.symbols());
+            _symbols.concat(newSymbols.symbols);
         }
         
         /* @throws RangeError */
