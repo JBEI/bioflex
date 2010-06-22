@@ -43,7 +43,7 @@ package org.jbei.bio.orf
             var orfs2Reverse:Vector.<ORF> = orfPerFrame(1, reverseSymbolList, minimumLength, StrandType.BACKWARD);
             var orfs3Reverse:Vector.<ORF> = orfPerFrame(2, reverseSymbolList, minimumLength, StrandType.BACKWARD);
             
-            var reverseCombined:Vector.<ORF> = orfs1Reverse.concat(orfs3Reverse, orfs3Reverse);
+            var reverseCombined:Vector.<ORF> = orfs1Reverse.concat(orfs2Reverse, orfs3Reverse);
             
             var sequenceLength:int = reverseSymbolList.length;
             for(var i:int = 0; i < reverseCombined.length; i++) {
