@@ -78,7 +78,7 @@ package org.jbei.bio.sequence.common
         
         public function addSymbols(newSymbols:SymbolList):void
         {
-            _symbols.concat(newSymbols.symbols);
+            _symbols = _symbols.concat(newSymbols.symbols);
         }
         
         /* @throws RangeError */
