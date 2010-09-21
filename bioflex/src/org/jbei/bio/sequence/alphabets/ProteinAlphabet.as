@@ -1,12 +1,18 @@
 package org.jbei.bio.sequence.alphabets
 {
+    import org.jbei.bio.BioException;
     import org.jbei.bio.sequence.symbols.AminoAcidSymbol;
     import org.jbei.bio.sequence.symbols.GapSymbol;
 
-    /**
-     * @author Zinovii Dmytriv
-     */
     [RemoteClass(alias="org.jbei.bio.sequence.alphabets.ProteinAlphabet")]
+    /**
+    * Protein alphabet. Most general aplhabet to build protein sequences.
+    * 
+    * This class is singleton. In order to create an instance of this class call <code>ProteinAlphabet.instance</code>. 
+    * 
+    * @see org.jbei.bio.sequence.symbols.AminoAcidSymbol
+    * @author Zinovii Dmytriv
+    */
     public class ProteinAlphabet extends AbstractAlphabet
     {
         private static var _instance:ProteinAlphabet = null;
@@ -32,7 +38,26 @@ package org.jbei.bio.sequence.alphabets
         private const _y:AminoAcidSymbol = new AminoAcidSymbol('Tyrosine', 'Tyr', 'Y');
         private const _v:AminoAcidSymbol = new AminoAcidSymbol('Valine ', 'Val', 'V');
         
+        // Contructor
+        /**
+         * Constructor
+         */
+        public function ProteinAlphabet() {
+            super();
+            
+            if(_instance) {
+                throw new BioException("This is singleton class and it was already initializes. Use ProteinAlphabet.instance to get instance of the class.");
+            }
+        }
+        
         // Public Methods
+        /**
+         * Singleton instance retrieving method.
+         * 
+         * Because this class is singleton so to get an instance of the class this property has to be called.
+         * 
+         * <code>ProteinAlphabet.instance</code>
+         */
         public static function get instance():ProteinAlphabet
         {
             if(_instance == null) {
@@ -85,13 +110,10 @@ package org.jbei.bio.sequence.alphabets
         public function get tyrosine():AminoAcidSymbol { return _y; }
         public function get valine():AminoAcidSymbol { return _v; }
         
-        // Public Methods
-        public function symbolByValue(value:String):AminoAcidSymbol
-        {
-            return symbolsMap[value];
-        }
-        
         // Protected Methods
+        /**
+        * @inheritDoc
+        */
         protected override function initialize():void
         {
             super.initialize();

@@ -1,10 +1,26 @@
 package org.jbei.bio.enzymes
 {
     import mx.core.ByteArrayAsset;
+    
+    import org.jbei.bio.BioException;
 
     /**
-     * @author Zinovii Dmytriv
-     */
+    * Restriction Enzymes loader.
+    * 
+    * This is singleton class. To get instance use instance property: <code>RestrictionEnzymeManager.instance</code>.
+    * 
+    * <pre>
+    * Usage:
+    * 
+    * To get most commonly used restriction enzymes use getCommonRestrictionEnzymes() method:
+    * <code>RestrictionEnzymeManager.instance.getCommonRestrictionEnzymes()<code>
+    * 
+    * To get all REBASE restriction enzymes use getCommonRestrictionEnzymes() method:
+    * <code>RestrictionEnzymeManager.instance.getRebaseRestrictionEnzymes()<code>
+    * </pre>
+    * 
+    * @author Zinovii Dmytriv
+    */
     public class RestrictionEnzymeManager
     {
         [Embed("assets/rebase.xml", mimeType="application/octet-stream")]
@@ -19,11 +35,22 @@ package org.jbei.bio.enzymes
         private var rebaseRestrictionEnzymes:Vector.<RestrictionEnzyme> = null;
         
         // Constructor
+        /**
+        * Contructor
+        * 
+        * This is singleton class. Don't use contructor to get instance of the class. Call RestrictionEnzymeManager.instance
+        */
         public function RestrictionEnzymeManager()
         {
+            if(_instance) {
+                throw new BioException("This is singleton class. To get instance use instance property: RestrictionEnzymeManager.instance");
+            }
         }
         
         // Properties
+        /**
+        * Singleton instance property. Use this property to get instance of the RestrictionEnzymeManager class
+        */
         public static function get instance():RestrictionEnzymeManager
         {
             if(_instance == null) {
@@ -34,6 +61,11 @@ package org.jbei.bio.enzymes
         }
         
         // Public Methods
+        /**
+        * Get list of the most commonly used restriction enzymes. 
+        * 
+        * @return List of most common enzymes 
+        */
         public function getCommonRestrictionEnzymes():Vector.<RestrictionEnzyme>
         {
             if(commonRestrictionEnzymes != null) {
@@ -48,6 +80,11 @@ package org.jbei.bio.enzymes
             return commonRestrictionEnzymes;
         }
         
+        /**
+         * Get list of all REBASE database restriction enzymes.
+         * 
+         * @return List of all enzymes from REBASE database 
+         */
         public function getRebaseRestrictionEnzymes():Vector.<RestrictionEnzyme>
         {
             if(rebaseRestrictionEnzymes != null) {

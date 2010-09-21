@@ -1,15 +1,26 @@
 package org.jbei.bio.sequence.dna
 {
-    /**
-     * @author Zinovii Dmytriv
-     */
     [RemoteClass(alias="org.jbei.bio.sequence.dna.FeatureNote")]
+    
+    /**
+    * Feature note holder.
+    * 
+    * @see org.jbei.bio.sequence.dna.FeatureNote
+    * 
+    * @author Zinovii Dmytriv
+    */
     public class FeatureNote
     {
         private var _name:String;
         private var _value:String;
         
         // Constructor
+        /**
+        * Contructor
+        * 
+        * @param name Note name
+        * @param value Note value
+        */
         public function FeatureNote(name:String = "", value:String = "")
         {
             _name = name;
@@ -17,6 +28,9 @@ package org.jbei.bio.sequence.dna
         }
         
         // Properties
+        /**
+        * Note name
+        */
         public function get name():String
         {
             return _name;
@@ -27,6 +41,9 @@ package org.jbei.bio.sequence.dna
             _name = value;
         }
         
+        /**
+         * Note value
+         */
         public function get value():String
         {
             return _value;
@@ -38,6 +55,9 @@ package org.jbei.bio.sequence.dna
         }
         
         // Public Methods
+        /**
+         * Clone feature note
+         */
         public function clone():FeatureNote
         {
             return new FeatureNote(_name, _value);

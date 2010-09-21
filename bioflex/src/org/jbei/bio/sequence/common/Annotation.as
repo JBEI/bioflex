@@ -1,15 +1,20 @@
 package org.jbei.bio.sequence.common
 {
-    /**
-     * @author Zinovii Dmytriv
-     */
     [RemoteClass(alias="org.jbei.bio.sequence.common.Annotation")]
+    /**
+    * General annotation class.
+    * 
+    * @author Zinovii Dmytriv
+    */
     public class Annotation implements IAnnotation
     {
         private var _start:int = 0;
         private var _end:int = 0;
         
         // Constructor
+        /**
+        * Contructor
+        */
         public function Annotation(start:int = 0, end:int = 0)
         {
             _start = start;
@@ -17,6 +22,9 @@ package org.jbei.bio.sequence.common
         }
         
         // Properties
+        /**
+        * @inheritDoc
+        */
         public function get start():int
         {
             return _start;
@@ -27,6 +35,9 @@ package org.jbei.bio.sequence.common
             _start = value;
         }
         
+        /**
+         * @inheritDoc
+         */
         public function get end():int
         {
             return _end;
@@ -38,6 +49,11 @@ package org.jbei.bio.sequence.common
         }
         
         // Public Methods
+        /**
+        * Calculates if this annotation contains another annotation.
+        * 
+        * @param annotation Annotation to check against
+        */
         public function contains(annotation:Annotation):Boolean
         {
             var result:Boolean = false;

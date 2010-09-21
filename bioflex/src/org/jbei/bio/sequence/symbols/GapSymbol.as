@@ -1,15 +1,23 @@
 package org.jbei.bio.sequence.symbols
 {
-    /**
-     * @author Zinovii Dmytriv
-     */
     [RemoteClass(alias="org.jbei.bio.sequence.symbols.GapSymbol")]
+    /**
+    * General class for gap symbols.
+    * 
+    * @author Zinovii Dmytriv
+    */
     public class GapSymbol implements ISymbol
     {
         private var _name:String;
         private var _value:String;
         
         // Constructor
+        /**
+        * Contructor
+        * 
+        * @param name Gap symbol name
+        * @param value Gap symbol string value
+        */
         public function GapSymbol(name:String = "", value:String = "")
         {
             _name = name;
@@ -17,6 +25,9 @@ package org.jbei.bio.sequence.symbols
         }
         
         // Properties
+        /**
+        * @inheritDoc
+        */
         public function get name():String
         {
             return _name;
@@ -27,6 +38,9 @@ package org.jbei.bio.sequence.symbols
             _name = value;
         }
         
+        /**
+         * @inheritDoc
+         */
         public function get value():String
         {
             return _value;

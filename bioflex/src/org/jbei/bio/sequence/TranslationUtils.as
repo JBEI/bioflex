@@ -11,8 +11,10 @@ package org.jbei.bio.sequence
     import org.jbei.bio.sequence.symbols.IllegalSymbolException;
 
     /**
-     * @author Zinovii Dmytriv
-     */
+    * DNA-RNA-PROTEIN translation utilities.
+    * 
+    * @author Zinovii Dmytriv
+    */
     public class TranslationUtils
     {
         private static var dnaAlphabet:DNAAlphabet = DNAAlphabet.instance;
@@ -23,7 +25,13 @@ package org.jbei.bio.sequence
         private static var rnaToDNATranslationTable:Dictionary = null;
         private static var aminoAcidsTranslationTable:Dictionary = null;
         
-        /* @throws org.jbei.bio.exceptions.IllegalSymbolException */
+        /**
+        * DNA-to-RNA one symbol translation
+        * 
+        * @param symbol DNA symbol
+        * @return Correspondent RNA symbol
+        * @throws org.jbei.bio.exceptions.IllegalSymbolException 
+        */
         public static function dnaToRNASymbol(symbol:ISymbol):ISymbol
         {
             initializeDNAToRNATranslationTable();
@@ -41,7 +49,13 @@ package org.jbei.bio.sequence
             return newSymbol;
         }
         
-        /* @throws org.jbei.bio.exceptions.IllegalSymbolException */
+        /**
+        * RNA-to-DNA one symbol translation
+        * 
+        * @param symbol RNA symbol
+        * @return Correspondent DNA symbol
+        * @throws org.jbei.bio.exceptions.IllegalSymbolException 
+        */
         public static function rnaToDNASymbol(symbol:ISymbol):ISymbol
         {
             initializeRNAToDNATranslationTable();
@@ -59,7 +73,13 @@ package org.jbei.bio.sequence
             return newSymbol;
         }
         
-        /* @throws org.jbei.bio.exceptions.IllegalSymbolException */
+        /**
+        * DNA-to-RNA sequence translation
+        * 
+        * @param symbolList DNA sequence
+        * @return Correspondent RNA sequence
+        * @throws org.jbei.bio.exceptions.IllegalSymbolException 
+        */
         public static function dnaToRNA(symbolList:SymbolList):SymbolList
         {
             var symbols:Vector.<ISymbol> = symbolList.symbols;
@@ -76,7 +96,13 @@ package org.jbei.bio.sequence
             return new SymbolList(rnaSymbols, RNAAlphabet.instance);
         }
         
-        /* @throws org.jbei.bio.exceptions.IllegalSymbolException */
+        /**
+        * RNA-to-DNA sequence translation
+        * 
+        * @param symbolList RNA sequence
+        * @return Correspondent DNA sequence
+        * @throws org.jbei.bio.exceptions.IllegalSymbolException 
+        */
         public static function rnaToDNA(symbolList:SymbolList):SymbolList
         {
             var symbols:Vector.<ISymbol> = symbolList.symbols;
@@ -93,6 +119,15 @@ package org.jbei.bio.sequence
             return new SymbolList(dnaSymbols, DNAAlphabet.instance);
         }
         
+        /**
+        * RNA triplets to aminoacid symbol translation
+        * 
+        * @param nucleotide1 Nucleotide 1
+        * @param nucleotide2 Nucleotide 2
+        * @param nucleotide3 Nucleotide 3
+        * @return Correspondent aminoacid symbol
+        * @throws org.jbei.bio.exceptions.IllegalSymbolException 
+        */
         public static function rnaToProteinSymbol(nucleotide1:ISymbol, nucleotide2:ISymbol, nucleotide3:ISymbol):ISymbol
         {
             initializeAminoAcidsTranslationTable();
@@ -112,6 +147,15 @@ package org.jbei.bio.sequence
             return symbol;
         }
         
+        /**
+        * DNA triplets to aminoacid symbol translation
+        * 
+        * @param nucleotide1 Nucleotide 1
+        * @param nucleotide2 Nucleotide 2
+        * @param nucleotide3 Nucleotide 3
+        * @return Correspondent aminoacid symbol
+        * @throws org.jbei.bio.exceptions.IllegalSymbolException 
+        */
         public static function dnaToProteinSymbol(nucleotide1:ISymbol, nucleotide2:ISymbol, nucleotide3:ISymbol):ISymbol
         {
             initializeAminoAcidsTranslationTable();
@@ -131,6 +175,13 @@ package org.jbei.bio.sequence
             return symbol;
         }
         
+        /**
+        * RNA to protein sequence translation
+        * 
+        * @param symbolList RNA sequence
+        * @return Correspondent protein sequence
+        * @throws org.jbei.bio.exceptions.IllegalSymbolException 
+        */
         public static function rnaToProtein(symbolList:SymbolList):SymbolList
         {
             var length:int = symbolList.length - (symbolList.length % 3);
@@ -150,6 +201,14 @@ package org.jbei.bio.sequence
             return new SymbolList(proteinSymbols, proteinAlphabet);
         }
         
+        /**
+        * Checks if nucleotides triplet is start codon
+        * 
+        * @param nucleotide1 Nucleotide 1
+        * @param nucleotide2 Nucleotide 2
+        * @param nucleotide3 Nucleotide 3
+        * @return Boolean
+        */
         public static function isStartCodon(nucleotide1:ISymbol, nucleotide2:ISymbol, nucleotide3:ISymbol):Boolean
         {
             var result:Boolean = false;
@@ -163,6 +222,14 @@ package org.jbei.bio.sequence
             return (triplet == 'atg' || triplet == 'aug');
         }
         
+        /**
+         * Checks if nucleotides triplet is stop codon
+         * 
+         * @param nucleotide1 Nucleotide 1
+         * @param nucleotide2 Nucleotide 2
+         * @param nucleotide3 Nucleotide 3
+         * @return Boolean
+         */
         public static function isStopCodon(nucleotide1:ISymbol, nucleotide2:ISymbol, nucleotide3:ISymbol):Boolean
         {
             var result:Boolean = false;

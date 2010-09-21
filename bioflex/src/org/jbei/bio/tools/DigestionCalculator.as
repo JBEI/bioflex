@@ -7,9 +7,20 @@ package org.jbei.bio.tools
     import org.jbei.bio.enzymes.RestrictionEnzymeMapper;
     import org.jbei.bio.sequence.dna.DNASequence;
     import org.jbei.bio.sequence.dna.DigestionFragment;
-
+    
+    /**
+    * Digestion calculator.
+    * */
     public class DigestionCalculator
     {
+        /**
+        * Calculates position where enzyme cuts sequence and lists digestion fragments.
+        * 
+        * @param dnaSequence DNA sequence to digest.
+        * @param enzymes List of enzymes that participates in digestion.
+        * 
+        * @return List of digestion fragments
+        * */
         public static function digestSequence(dnaSequence:DNASequence, enzymes:Vector.<RestrictionEnzyme>):Vector.<DigestionFragment>
         {
             var reSitesMap:Dictionary = RestrictionEnzymeMapper.cutSequence(enzymes, dnaSequence);

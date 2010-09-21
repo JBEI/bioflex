@@ -5,26 +5,44 @@ package org.jbei.bio.sequence.alphabets
     import org.jbei.bio.sequence.symbols.GapSymbol;
     import org.jbei.bio.sequence.symbols.ISymbol;
 
+    [RemoteClass(alias="org.jbei.bio.sequence.alphabets.AbstractAlphabet")]
+    
     /**
+     * Abstract general class for Alphabets.
+     * 
      * @author Zinovii Dmytriv
      */
-    [RemoteClass(alias="org.jbei.bio.sequence.alphabets.AbstractAlphabet")]
     public class AbstractAlphabet implements IAlphabet
     {
+        /**
+         * @private
+         */
         protected var symbolsMap:Dictionary;
         
+        /**
+         * @private
+         */
         protected const _gap:GapSymbol = new GapSymbol("Gap", "-");
         
         // Constructor
+        /**
+        * Contructor
+        */
         public function AbstractAlphabet()
         {
             initialize();
         }
         
         // Properties
+        /**
+        * @inheritDoc
+        */
         public function get gap():GapSymbol { return _gap; }
         
         // Public Methods
+        /**
+         * @inheritDoc
+         */
         public function getSymbols():Vector.<ISymbol>
         {
             if(symbolsMap == null) {
@@ -42,11 +60,26 @@ package org.jbei.bio.sequence.alphabets
         }
         
         // Protected Methods
+        /**
+         * Initializes symbolsMap.
+         */
         protected function initialize():void
         {
             symbolsMap = new Dictionary(true);
             
             symbolsMap[_gap.value] = _gap;
+        }
+        
+        // Public Methods
+        /**
+         * Gets nucleotide symbol by it's string representation.
+         * 
+         * @param value String representation of the alphabet symbol
+         * @return Alphabet symbol
+         */
+        public function symbolByValue(value:String):ISymbol
+        {
+            return symbolsMap[value];
         }
     }
 }

@@ -6,11 +6,25 @@ package org.jbei.bio.enzymes
     import org.jbei.bio.sequence.common.SymbolList;
 
     /**
-     * @author Zinovii Dmytriv
-     */
+    * Restriction Enzymes cutter. Finds restriction enzyme sites in DNA sequence.
+    * 
+    * @see org.jbei.bio.enzymes.RestrictionEnzyme
+    * @see org.jbei.bio.enzymes.RestrictionCutSite
+    * 
+    * @author Zinovii Dmytriv
+    */
     public class RestrictionEnzymeMapper
     {
-        public static function cutSequence(restrictionEnzymes:Vector.<RestrictionEnzyme>, symbolList:SymbolList):Dictionary /* [RestrictionEnzyme] = Array(RestrictionCutSite) */
+        /**
+        * Cut sequence by list of restriction enzymes.
+        * 
+        * @param restrictionEnzymes List of restriction enzymes to cut sequence with
+        * @param symbolList DNA sequence
+        * @return Dictionary/Map where RestrictionEnzyme object is a key and List(Vector) of RestrictionCutSite is a value.
+        * 
+        * @see org.jbei.bio.enzymes.RestrictionCutSite
+        */
+        public static function cutSequence(restrictionEnzymes:Vector.<RestrictionEnzyme>, symbolList:SymbolList):Dictionary /* [RestrictionEnzyme] = Vector(RestrictionCutSite) */
         {
             var reCuts:Dictionary = new Dictionary();
             
@@ -23,6 +37,15 @@ package org.jbei.bio.enzymes
             return reCuts;
         }
         
+        /**
+         * Cut sequence with one restriction enzyme.
+         * 
+         * @param restrictionEnzyme Restriction enzyme to cut sequence with
+         * @param symbolList DNA sequence
+         * @return List of RestrictionCutSite-s
+         * 
+         * @see org.jbei.bio.enzymes.RestrictionCutSite
+         */
         public static function cutSequenceByRestrictionEnzyme(restrictionEnzyme:RestrictionEnzyme, sequenceSymbolList:SymbolList):Vector.<RestrictionCutSite> /* of RestrictionCutSite */
         {
             var restrictionCutSites:Vector.<RestrictionCutSite> = new Vector.<RestrictionCutSite>();

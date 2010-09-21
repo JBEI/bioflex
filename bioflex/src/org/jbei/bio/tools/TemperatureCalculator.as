@@ -1,12 +1,18 @@
 package org.jbei.bio.tools
 {
+    import org.jbei.bio.BioException;
     import org.jbei.bio.sequence.dna.DNASequence;
 
     /**
-     * Usage:
+     * DNA temperature calculator.
      * 
+     * <p>Usage:</p>
+     * <code>
+     * <pre>
      * var dnaSequence:DNASequence = DNATools.createDNA("atggggggggagagagactacgatcgatcgatcgtacgtagctacgtagctacgtacg");
      * trace(TemperatureCalculator.calculateTemperature(dnaSequence, TemperatureCalculator.TABLE_BRESLAUER));
+     * </pre>
+     * </code>
      * 
      * @author Zinovii Dmytriv
      */
@@ -21,11 +27,18 @@ package org.jbei.bio.tools
         private static const C:Number = 0.5e-6; // Oligo concentration. 0.5uM is typical for PCR
         private static const Na:Number = 50e-3; // Monovalent salt conc. 50mM is typical for PCR
         
-        /* @throws Error on invalid table type */
+        /** 
+        * Calculates temperature for DNA sequence using specific algorithm.
+        * 
+        * @param dnaSequence Piece of DNA sequence that you want to calculate temperature for.
+        * @param type Temperature calculation algorithm table type. Currently supported 3 types: BRESLAUER, SUGIMOTO or UNIFIED. Parameter not required. Default algorithm: BRESLAUER. 
+        * 
+        * @return Temperature in C
+        */
         public static function calculateTemperature(dnaSequence:DNASequence, type:String = TABLE_BRESLAUER):Number
         {
             if(type != TABLE_BRESLAUER && type != TABLE_SUGIMOTO && type != TABLE_UNIFIED) {
-                throw new Error("Invalid table type!");
+                throw new BioException("Invalid table type!");
             }
             
             var sequence:String = dnaSequence.seqString();
@@ -71,6 +84,7 @@ package org.jbei.bio.tools
             
             var temperature:Number = ((-1000.0 * sumDeltaH) / (A + -sumDeltaS + R * Math.log(C / 4.0))) - 273.15 + 16.6 * Math.LOG10E * Math.log(Na);
             
+            // If temperature is negative then return 0
             if(temperature < 0) {
                 return 0;
             }

@@ -7,13 +7,22 @@ package org.jbei.bio.orf
     import org.jbei.bio.sequence.symbols.GapSymbol;
     import org.jbei.bio.sequence.symbols.ISymbol;
     import org.jbei.bio.sequence.symbols.NucleotideSymbol;
-
+    
     /**
-     * @author Zinovii Dmytriv
-     */
+    * Helper class to find Open Read Frames in DNA sequence.
+    * 
+    * @author Zinovii Dmytriv
+    */
     public class ORFFinder
     {
         // Public Methods
+        /**
+        * Calculates Open Read Frame for DNA sequence and filters it by minimum length. No open read frames shorter then minimum length will be listed.
+        * 
+        * @param dnaSymbolList DNA sequence.
+        * @param minumumLength Frame minimum length. If value is -1 then no minimum length is defined. Default -1.
+        * @return List of Open read frames.  
+        */
         public static function calculateORFs(dnaSymbolList:SymbolList, minimumLength:int = -1):Vector.<ORF>
         {
             if(! dnaSymbolList || dnaSymbolList.length < 6) {
@@ -27,6 +36,14 @@ package org.jbei.bio.orf
             return orfs1.concat(orfs2, orfs3);
         }
         
+        /**
+         * Calculates Open Read Frame for DNA sequence in both directions and filters it by minimum length. No open read frames shorter then minimum length will be listed.
+         * 
+         * @param forwardSymbolList DNA sequence.
+         * @param reverseSymbolList DNA sequence.
+         * @param minumumLength Frame minimum length. If value is -1 then no minimum length is defined. Default -1.
+         * @return List of Open read frames.  
+         */
         public static function calculateORFBothDirections(forwardSymbolList:SymbolList, reverseSymbolList:SymbolList, minimumLength:int = -1):Vector.<ORF>
         {
             if(! forwardSymbolList || forwardSymbolList.length < 6) {

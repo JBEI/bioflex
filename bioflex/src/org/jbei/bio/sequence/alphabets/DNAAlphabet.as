@@ -1,13 +1,19 @@
 package org.jbei.bio.sequence.alphabets
 {
+    import org.jbei.bio.BioException;
     import org.jbei.bio.sequence.symbols.GapSymbol;
     import org.jbei.bio.sequence.symbols.ISymbol;
     import org.jbei.bio.sequence.symbols.NucleotideSymbol;
     
+    [RemoteClass(alias="org.jbei.bio.sequence.alphabets.DNAAlphabet")]
     /**
+     * DNA alphabet. Most general aplhabet to build DNA sequences.
+     * 
+     * This class is singleton. In order to create an instance of this class call <code>DNAAlphabet.instance</code>.
+     * 
+     * @see org.jbei.bio.sequence.symbols.NucleotideSumbol
      * @author Zinovii Dmytriv
      */
-    [RemoteClass(alias="org.jbei.bio.sequence.alphabets.DNAAlphabet")]
     public class DNAAlphabet extends AbstractAlphabet
     {
         private static var _instance:DNAAlphabet = null;
@@ -28,7 +34,26 @@ package org.jbei.bio.sequence.alphabets
         private const _b:NucleotideSymbol = new NucleotideSymbol("Ambiguous {'c' or 'g' or 't'}", "b", Vector.<ISymbol>([_c, _g, _t]));
         private const _n:NucleotideSymbol = new NucleotideSymbol("Ambiguous {'a' or 't' or 'g' or 'c'}", "n", Vector.<ISymbol>([_a, _c, _g, _t]));
         
+        // Contructor
+        /**
+         * Constructor
+         */
+        public function DNAAlphabet() {
+            super();
+            
+            if(_instance) {
+                throw new BioException("This is singleton class and it was already initializes. Use DNAAlphabet.instance to get instance of the class.");
+            }
+        }
+        
         // Public Methods
+        /**
+        * Singleton instance retrieving method.
+        * 
+        * Because this class is singleton so to get an instance of the class this property has to be called.
+        * 
+        * <code>DNAAlphabet.instance</code>
+        */
         public static function get instance():DNAAlphabet
         {
             if(_instance == null) {
@@ -55,13 +80,10 @@ package org.jbei.bio.sequence.alphabets
         public function get b():NucleotideSymbol { return _b; }
         public function get n():NucleotideSymbol { return _n; }
         
-        // Public Methods
-        public function symbolByValue(value:String):ISymbol
-        {
-            return symbolsMap[value];
-        }
-        
         // Protected Methods
+        /**
+        * @inheritDoc
+        */
         protected override function initialize():void
         {
             super.initialize();

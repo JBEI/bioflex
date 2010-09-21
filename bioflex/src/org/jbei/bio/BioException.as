@@ -1,8 +1,10 @@
 package org.jbei.bio
 {
     /**
-     * @author Zinovii Dmytriv
-     */
+    * General exception class for all BioFlex exceptions.
+    * 
+    * @author Zinovii Dmytriv
+    */
     public class BioException extends Error
     {
         // Constructor

@@ -1,9 +1,12 @@
 package org.jbei.bio.enzymes
 {
-    /**
-     * @author Zinovii Dmytriv
-     */
     [RemoteClass(alias="org.jbei.bio.sequence.dna.RestrictionEnzyme")]
+    
+    /**
+    * Restriction Enzyme holder.
+    * 
+    * @author Zinovii Dmytriv
+    */
     public class RestrictionEnzyme
     {
         private var _name:String;
@@ -17,6 +20,19 @@ package org.jbei.bio.enzymes
         private var _usReverse:int;
         
         // Constructor
+        /**
+        * Contructor
+        * 
+        * @param name Enzyme name
+        * @param site Enzyme site
+        * @param cutType Downstream or Upstream cut type. Values 0 - downstream or 1 - upstream
+        * @param forwardRegex Forward regular expression
+        * @param reverseRegex Reverse regular expression
+        * @param dsForward Downstream 3" strand cut position
+        * @param dsReverse Downstream 5" strand cut position
+        * @param usForward Upstream 3" strand cut position
+        * @param usReverse Upstream 5" strand cut position
+        */
         public function RestrictionEnzyme(name:String = "", site:String = "", cutType:int = 0, forwardRegex:String = "", reverseRegex:String = "", dsForward:int = 0, dsReverse:int = 0, usForward:int = 0, usReverse:int = 0)
         {
             _name = name;
@@ -31,6 +47,9 @@ package org.jbei.bio.enzymes
         }
         
         // Properties
+        /**
+        * Enzyme name
+        */
         public function get name():String
         {
             return _name;
@@ -41,6 +60,9 @@ package org.jbei.bio.enzymes
             _name = value;
         }
         
+        /**
+         * Enzyme site
+         */
         public function get site():String
         {
             return _site;
@@ -51,6 +73,9 @@ package org.jbei.bio.enzymes
             _site = value;
         }
         
+        /**
+         * Downstream or Upstream cut type. Values 0 - downstream or 1 - upstream. Default 0.
+         */
         public function get cutType():int
         {
             return _cutType;
@@ -61,6 +86,9 @@ package org.jbei.bio.enzymes
             _cutType = value;
         }
         
+        /**
+        * Forward regular expression
+        */
         public function get forwardRegex():String
         {
             return _forwardRegex;
@@ -71,6 +99,9 @@ package org.jbei.bio.enzymes
             _forwardRegex = value;
         }
         
+        /**
+         * Reverse regular expression
+         */
         public function get reverseRegex():String
         {
             return _reverseRegex;
@@ -81,6 +112,9 @@ package org.jbei.bio.enzymes
             _reverseRegex = value;
         }
         
+        /**
+         * Downstream 3" strand cut position
+         */
         public function get dsForward():int
         {
             return _dsForward;
@@ -91,6 +125,9 @@ package org.jbei.bio.enzymes
             _dsForward = value;
         }
         
+        /**
+         * Downstream 5" strand cut position
+         */
         public function get dsReverse():int
         {
             return _dsReverse;
@@ -101,6 +138,9 @@ package org.jbei.bio.enzymes
                 _dsReverse = value;
         }
         
+        /**
+         * Upstream 3" strand cut position
+         */
         public function get usForward():int
         {
             return _usForward;
@@ -111,6 +151,9 @@ package org.jbei.bio.enzymes
             _usForward = value;
         }
         
+        /**
+         * Upstream 5" strand cut position
+         */
         public function get usReverse():int
         {
             return _usReverse;
@@ -122,6 +165,9 @@ package org.jbei.bio.enzymes
         }
         
         // Public Methods
+        /**
+        * Checks if enzyme is palindromical
+        */
         public function isPalindromic():Boolean
         {
             //GTGCAG = CTGCAC
