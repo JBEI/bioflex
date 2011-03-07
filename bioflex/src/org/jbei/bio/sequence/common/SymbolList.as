@@ -165,5 +165,10 @@ package org.jbei.bio.sequence.common
             
             _symbols = _symbols.slice(0, position).concat(newSymbols.symbols).concat(_symbols.slice(position));
         }
+        
+        public function toString():String
+        {
+            return seqString();
+        }
     }
 }

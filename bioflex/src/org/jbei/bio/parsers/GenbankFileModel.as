@@ -17,6 +17,9 @@ package org.jbei.bio.parsers
         
         public function GenbankFileModel()
         {
+            _locus = new GenbankLocusKeyword();
+            _origin = new GenbankOriginKeyword();
+            _features = new GenbankFeatureKeyword();
         }
         
         public function get locus():GenbankLocusKeyword
