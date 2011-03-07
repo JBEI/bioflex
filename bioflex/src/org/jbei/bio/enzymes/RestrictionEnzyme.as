@@ -173,5 +173,11 @@ package org.jbei.bio.enzymes
             //GTGCAG = CTGCAC
             return _forwardRegex == _reverseRegex;
         }
+        
+        public function toString():String
+        {
+            return "RestrictionEnzyme: " + _name;
+        
+        }
     }
 }
