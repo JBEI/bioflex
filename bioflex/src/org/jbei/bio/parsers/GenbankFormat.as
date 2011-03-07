@@ -197,6 +197,13 @@ package org.jbei.bio.parsers
             var qualifierBlocks:Vector.<String> = splitFeatureQualifierBlocks(block);
             result.key = StringUtil.trim(block.substring(5, 21));
             var location:String = StringUtil.trim(block.substr(21));
+            if (location.charAt(0) == "c") { // complement
+                location = location.substr(11);
+                location = location.substr(0, location.length -1);
+                result.strand = -1;
+            } else {
+                result.strand = 1;
+            }
             var splitLocation:Array = location.split("..");
             result.genbankStart = parseInt(splitLocation[0]);
             result.end = parseInt(splitLocation[1]);
@@ -546,7 +553,11 @@ package org.jbei.bio.parsers
                 for (var i:int = 0; i < featureKeyword.features.length; i++) {
                     tempFeature = featureKeyword.features[i];
                     result = result + "     " + paddedString(tempFeature.key, 16);
-                    result = result + tempFeature.genbankStart.toString() + ".." + tempFeature.end.toString() + "\n";
+                    if (tempFeature.strand == 1) {
+                        result = result + tempFeature.genbankStart.toString() + ".." + tempFeature.end.toString() + "\n";
+                    } else {
+                        result = result + "complement(" + tempFeature.genbankStart.toString() + ".." + tempFeature.end.toString() + ")\n";
+                    }
                     if (tempFeature.featureQualifiers.length > 0) {
                         result = result + generateFeatureQualifiers(tempFeature.featureQualifiers);
                     }

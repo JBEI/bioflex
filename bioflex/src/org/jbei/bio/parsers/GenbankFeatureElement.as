@@ -7,6 +7,7 @@ package org.jbei.bio.parsers
         private var _key:String;
         private var _genbankStart:int;
         private var _end:int;
+        private var _strand:int;
         private var _featureQualifiers:Vector.<GenbankFeatureQualifier>;
         
         public function GenbankFeatureElement()
@@ -28,6 +29,11 @@ package org.jbei.bio.parsers
             return _genbankStart;
         }
 
+        public function set genbankStart(genbankStart:int):void
+        {
+            _genbankStart = genbankStart;
+        }
+
         public function get end():int
         {
             return _end;
@@ -38,10 +44,14 @@ package org.jbei.bio.parsers
             _end = end;
         }            
         
-        
-        public function set genbankStart(genbankStart:int):void
+        public function get strand():int
         {
-            _genbankStart = genbankStart;
+            return _strand;
+        }
+        
+        public function set strand(strand:int):void
+        {
+            _strand = strand;
         }
         
         public function get featureQualifiers():Vector.<GenbankFeatureQualifier>
