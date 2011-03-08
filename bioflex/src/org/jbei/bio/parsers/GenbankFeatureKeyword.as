@@ -17,6 +17,7 @@ package org.jbei.bio.parsers
         public function GenbankFeatureKeyword()
         {
             super();
+            _features = new Vector.<GenbankFeatureElement>();
         }
     }
 }

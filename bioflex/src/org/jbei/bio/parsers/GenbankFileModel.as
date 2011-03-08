@@ -12,7 +12,10 @@ package org.jbei.bio.parsers
     {
         private var _locus:GenbankLocusKeyword;
         private var _origin:GenbankOriginKeyword;
-        private var _keywords:Vector.<GenbankKeyword> = new Vector.<GenbankKeyword>();
+        private var _accession:String;
+        private var _version:String;
+        private var _keywordsTag:String;
+        private var _keywords:Vector.<GenbankKeyword>;
         private var _features:GenbankFeatureKeyword;
         
         public function GenbankFileModel()
@@ -20,6 +23,7 @@ package org.jbei.bio.parsers
             _locus = new GenbankLocusKeyword();
             _origin = new GenbankOriginKeyword();
             _features = new GenbankFeatureKeyword();
+            _keywords = new Vector.<GenbankKeyword>();
         }
         
         public function get locus():GenbankLocusKeyword
@@ -40,6 +44,48 @@ package org.jbei.bio.parsers
         public function set origin(origin:GenbankOriginKeyword):void
         {
             _origin = origin;
+        }
+        
+        public function get accession():String 
+        {
+            if (_accession == null) {
+                return locus.locusName;
+            } else {
+                return _accession;
+            }
+        }
+        
+        public function set accession(accession:String):void
+        {
+            _accession = accession;
+        }
+        
+        public function get version():String
+        {
+            if (_version == null) {
+                return locus.locusName;
+            } else {
+                return _version;
+            }
+        }
+        
+        public function set version(version:String):void
+        {
+            _version = version;
+        }
+        
+        public function get keywordsTag():String
+        {
+            if (_keywordsTag == null) {
+                return ".";
+            } else {
+                return _keywordsTag;
+            }
+        }
+        
+        public function set keywordsTag(keywordsTag:String):void
+        {
+            _keywordsTag = keywordsTag;
         }
         
         public function get keywords():Vector.<GenbankKeyword> {

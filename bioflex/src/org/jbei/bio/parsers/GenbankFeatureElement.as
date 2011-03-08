@@ -12,6 +12,7 @@ package org.jbei.bio.parsers
         
         public function GenbankFeatureElement()
         {
+            _featureQualifiers = new Vector.<GenbankFeatureQualifier>();
         }
         
         public function get key():String

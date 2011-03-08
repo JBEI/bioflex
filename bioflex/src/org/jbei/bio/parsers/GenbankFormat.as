@@ -58,7 +58,7 @@ package org.jbei.bio.parsers
         * Populates the GenbankModel when done.
         *  
         */
-        public function parseGenbankFile(genbankFile:String):GenbankFileModel 
+        public static function parseGenbankFile(genbankFile:String):GenbankFileModel 
         {
             var genbank:GenbankFileModel = new GenbankFileModel();
             
@@ -74,6 +74,10 @@ package org.jbei.bio.parsers
                     genbank.origin = keyword as GenbankOriginKeyword;
                 } else if (keyword.keyword == LOCUS_TAG) {
                     genbank.locus = keyword as GenbankLocusKeyword;
+                }  else if (keyword.keyword == ACCESSION_TAG) {
+                    genbank.accession = keyword.value;
+                } else if (keyword.keyword == VERSION_TAG) {
+                    genbank.version = keyword.value;
                 } else {
                     genbank.keywords.push(keyword);
                 }
@@ -82,11 +86,14 @@ package org.jbei.bio.parsers
             return genbank;
         }
         
-        public function generateGenbankFile(genbankFileModel:GenbankFileModel):String
+        public static function generateGenbankFile(genbankFileModel:GenbankFileModel):String
         {
             var result:String = "";
             genbankFileModel.locus.sequenceLength = genbankFileModel.origin.sequence.length.toString();
             result = result + generateLocusKeyword(genbankFileModel.locus);
+            result = result + paddedString("ACCESSION", 12) + genbankFileModel.accession + "\n";
+            result = result + paddedString("VERSION", 12) + genbankFileModel.version + "\n";
+            result = result + paddedString("KEYWORDS", 12) + genbankFileModel.keywordsTag + "\n";
             for (var i:int = 0; i < genbankFileModel.keywords.length; i++) {
                 result = result + generateKeyword(genbankFileModel.keywords[i]);
             }
@@ -396,8 +403,7 @@ package org.jbei.bio.parsers
             var seqBlocks:Array = null;
             for(var i:int = 1; i < lines.length; i++) {
                 seqBlocks = (lines[i] as String).substr(10).split(" ");
-                
-                line = line + seqBlocks.join(""); 
+                line = line + StringUtil.trim(seqBlocks.join(""));
             }
             
             result.sequence = line.toLowerCase();
@@ -445,7 +451,11 @@ package org.jbei.bio.parsers
                 result = result + "circular";
             }
             result = result + " "; // col 64 space
-            result = result + paddedString(locusKeyword.divisionCode, 3);
+            if (locusKeyword.divisionCode != null) {
+                result = result + paddedString(locusKeyword.divisionCode, 3);
+            } else {
+                result = result + paddedString("", 3);
+            }
             result = result + " "; // col 68 space
             
             var monthString:String = null;
@@ -500,7 +510,11 @@ package org.jbei.bio.parsers
         private static function generateOriginKeyword(originKeyword:GenbankOriginKeyword):String
         {
             var result:String = paddedString(ORIGIN_TAG, 12);
-            result = result + originKeyword.value + "\n";
+            if (originKeyword.value != null) {
+                result = result + originKeyword.value + "\n";
+            } else {
+                result = result + "\n";
+            }
             
             // sequence block
             var line:String = "";
