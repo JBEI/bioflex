@@ -61,6 +61,9 @@ package org.jbei.bio.parsers
         public static function parseGenbankFile(genbankFile:String):GenbankFileModel 
         {
             var genbank:GenbankFileModel = new GenbankFileModel();
+            var tempArray:Array = extractOrigin(genbankFile);
+            genbank.origin = tempArray[0] as GenbankOriginKeyword;
+            genbankFile = tempArray[1] as String;
             
             var keywordBlocks:Vector.<String> = splitKeywordBlocks(genbankFile);            
             
@@ -134,7 +137,7 @@ package org.jbei.bio.parsers
                 result = subResult;
                 
             } else if (keyword == ORIGIN_TAG) {
-                result = parseOriginBlock(block);
+                // origin tag is parsed elsewhere
             } else if (keyword == END_SEQUENCE_TAG) {
                 
             } else {
@@ -160,6 +163,55 @@ package org.jbei.bio.parsers
             
             result.keyword = keyword;
             result.subKeywords =subKeywords;
+            
+            return result;
+        }
+        
+        private static function extractOrigin(genbankFile:String):Array
+        {
+            var result:Array = new Array();
+            var genbankOriginKeyword:GenbankOriginKeyword = new GenbankOriginKeyword();
+            var sequence:String = "";
+            var rest:String = "";
+            
+            var lines:Array = genbankFile.split("\n");
+            var line:String;
+            var inSequenceBlock:Boolean = false;
+            var sequenceBlock:String = "";
+            
+            
+            
+            
+            for (var i:int = 0; i < lines.length; i++) {
+                line = lines[i] as String;
+                if ("ORIGIN" == line.substr(0, 6)) {
+                    genbankOriginKeyword.keyword = StringUtil.trim(line.substr(0, 12));
+                    genbankOriginKeyword.value = StringUtil.trim(line.substring(12));
+                    inSequenceBlock = true;
+                    i++; // skip to next line
+                    line = lines[i] as String;
+                }
+                if ("//" == line.substr(0, 2)) {
+                    inSequenceBlock = false;
+                }
+                if (inSequenceBlock) {
+                    var segments:Array = StringUtil.trim(line).split(" ");
+                    if (segments.length == 1) {
+                        // no spaces. Probably fasta
+                        sequence = sequence + (segments[0] as String).toLocaleLowerCase();
+                    } else {
+                        // probably numbered lines with spaces
+                        sequence = sequence + segments.slice(1).join("");
+                    }
+                    
+                } else {
+                    rest = rest + line + "\n";
+                }
+            }
+            
+            genbankOriginKeyword.sequence = sequence;
+            result.push(genbankOriginKeyword);
+            result.push(rest);
             
             return result;
         }
@@ -293,6 +345,10 @@ package org.jbei.bio.parsers
             if (value.charAt(value.length - 1) == "\"" && qualifier.quoted == true) {
                 value = value.substr(0, value.length -1);
             }
+            
+            if (qualifier.name == "label") {
+                value = value.replace(new RegExp("\\\\", "g"), " ");
+            }
             qualifier.value = value;
             
             return qualifier;
@@ -302,27 +358,36 @@ package org.jbei.bio.parsers
         {
             var result:GenbankLocusKeyword = new GenbankLocusKeyword();
             
-            var temp:Array = block.split(" ");
-            // flex's silly split
-            var fields:Array = new Array();
+            var temp:Array = StringUtil.trim(block).split(" ");
             
+            var fields:Array = new Array();
             for (var i:int = 0; i < temp.length; i++) {
-                if (temp[i] != "") {
+                if ("" != (temp[i] as String)) {
                     fields.push(temp[i]);
                 }
             }
             
-            result.locusName = fields[1] as String;
-            result.strandType = (fields[4] as String).substring(0, 2);
-            result.naType = (fields[4] as String).substr(3);
-            
-            var linear:String = (fields[5] as String);
-            if (linear == "circular") {
-                result.linear = false;
+            var temp2:Array = block.substr(12).split(" ");
+            if ("" == temp2[0] as String) {
+                result.locusName = "no name";
             } else {
-                result.linear = true; //blank implies linear
+                result.locusName = fields[1] as String;
             }
             
+            if ((fields[4] as String).length == 6) {
+                result.strandType = (fields[4] as String).substring(0, 2);
+                result.naType = (fields[4] as String).substr(3);
+            } else {
+                result.strandType = "ds";
+                result.naType = "DNA";
+            }
+            
+            if (block.search("linear") != -1) {
+                result.linear = true;
+            } else {
+                result.linear = false;
+            }
+                        
             var divCode:String = (fields[fields.length - 2] as String);
             if (divCode.length == 3) {
                 result.divisionCode = divCode;
@@ -390,25 +455,6 @@ package org.jbei.bio.parsers
             return result;
         }
 
-        private static function parseOriginBlock(block:String):GenbankKeyword
-        {
-            var result:GenbankOriginKeyword = new GenbankOriginKeyword();
-            
-            var lines:Array = block.split("\n");
-            
-            result.keyword = StringUtil.trim((lines[0] as String).substr(0, 12));
-            result.value = StringUtil.trim((lines[0] as String).substring(12));
-            
-            var line:String = "";
-            var seqBlocks:Array = null;
-            for(var i:int = 1; i < lines.length; i++) {
-                seqBlocks = (lines[i] as String).substr(10).split(" ");
-                line = line + StringUtil.trim(seqBlocks.join(""));
-            }
-            
-            result.sequence = line.toLowerCase();
-            return result;
-        }
         private static function splitBlocksByCharAt(block:String, index:int):Vector.<String>
         {
             var result:Vector.<String> = new Vector.<String>();
