@@ -11,7 +11,7 @@ package org.jbei.bio.sequence.alphabets
      * 
      * This class is singleton. In order to create an instance of this class call <code>DNAAlphabet.instance</code>.
      * 
-     * @see org.jbei.bio.sequence.symbols.NucleotideSumbol
+     * @see org.jbei.bio.sequence.symbols.NucleotideSymbol
      * @author Zinovii Dmytriv
      */
     public class DNAAlphabet extends AbstractAlphabet
@@ -42,7 +42,7 @@ package org.jbei.bio.sequence.alphabets
             super();
             
             if(_instance) {
-                throw new BioException("This is singleton class and it was already initializes. Use DNAAlphabet.instance to get instance of the class.");
+                throw new BioException("This is a singleton class and it was already initialized. Use DNAAlphabet.instance to get an instance of the class.");
             }
         }
         
