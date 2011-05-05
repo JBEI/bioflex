@@ -66,8 +66,8 @@ package org.jbei.bio.orf
             for(var i:int = 0; i < reverseCombined.length; i++) {
                 var orf:ORF = reverseCombined[i] as ORF;
                 
-                var start:int = sequenceLength - orf.start - 1;
-                var end:int = sequenceLength - orf.end - 1;
+                var start:int = sequenceLength - orf.start;
+                var end:int = sequenceLength - orf.end;
                 
                 orf.start = end;
                 orf.end = start;
@@ -132,8 +132,7 @@ package org.jbei.bio.orf
                             if(startCodonIndexes == null) {
                                 startCodonIndexes = new Vector.<int>();
                             }
-                            
-                            orfs.push(new ORF(startIndex, endIndex, strand, frame, startCodonIndexes));
+                            orfs.push(new ORF(startIndex, endIndex + 1, strand, frame, startCodonIndexes));
                         }
                     }
                     

@@ -369,7 +369,7 @@ package org.jbei.bio.parsers
             
             var temp2:Array = block.substr(12).split(" ");
             if ("" == temp2[0] as String) {
-                result.locusName = "no name";
+                result.locusName = "no_name";
             } else {
                 result.locusName = fields[1] as String;
             }

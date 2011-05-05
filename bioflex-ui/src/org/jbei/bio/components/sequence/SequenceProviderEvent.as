@@ -13,6 +13,8 @@ package org.jbei.bio.components.sequence
         public static const SEQUENCE_CHANGED:String = "SequenceChanged";
         public static const KIND_INSERT:String = "KindInsert";
         public static const KIND_DELETE:String = "KindDelete";
+        public static const KIND_NAME:String = "KindName";
+        public static const KIND_CIRCULAR:String = "KindCircular";
         
         public var kind:String;
         public var position:int;
