@@ -13,6 +13,7 @@ package org.jbei.bio.sequence.dna
     {
         private var _name:String;
         private var _value:String;
+        private var _quoted:Boolean;
         
         // Constructor
         /**
@@ -21,10 +22,11 @@ package org.jbei.bio.sequence.dna
         * @param name Note name
         * @param value Note value
         */
-        public function FeatureNote(name:String = "", value:String = "")
+        public function FeatureNote(name:String = "", value:String = "", quoted:Boolean = false)
         {
             _name = name;
             _value = value;
+            _quoted = quoted;
         }
         
         // Properties
@@ -52,6 +54,16 @@ package org.jbei.bio.sequence.dna
         public function set value(data:String):void
         {
             _value = data;
+        }
+        
+        public function get quoted():Boolean
+        {
+            return _quoted;
+        }
+        
+        public function set quoted(quoted:Boolean):void
+        {
+            _quoted = quoted;
         }
         
         // Public Methods
