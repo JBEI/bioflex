@@ -1,5 +1,8 @@
 package org.jbei.bio.sequence.dna
 {
+    import flash.net.LocalConnection;
+    
+    import org.jbei.bio.sequence.common.Location;
     import org.jbei.bio.sequence.common.StrandedAnnotation;
 
     [RemoteClass(alias="org.jbei.bio.sequence.dna.Feature")]
@@ -84,6 +87,12 @@ package org.jbei.bio.sequence.dna
         {
             var clonedFeature:Feature = new Feature(_name, start, end, _type, strand);
             
+			var clonedLocations:Vector.<Location> = new Vector.<Location>();
+			for (var j:int = 0; j < locations.length; j++) {
+				clonedLocations.push(new Location(locations[j].start, locations[j].end));
+			}
+			clonedFeature.locations = clonedLocations;
+			
             if(_notes && _notes.length > 0) {
                 var clonedNotes:Vector.<FeatureNote> = new Vector.<FeatureNote>();
                 

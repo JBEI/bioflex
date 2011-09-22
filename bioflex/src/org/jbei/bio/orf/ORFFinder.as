@@ -2,6 +2,7 @@ package org.jbei.bio.orf
 {
     import org.jbei.bio.sequence.TranslationUtils;
     import org.jbei.bio.sequence.alphabets.ProteinAlphabet;
+    import org.jbei.bio.sequence.common.Location;
     import org.jbei.bio.sequence.common.StrandType;
     import org.jbei.bio.sequence.common.SymbolList;
     import org.jbei.bio.sequence.symbols.GapSymbol;
@@ -69,9 +70,9 @@ package org.jbei.bio.orf
                 var start:int = sequenceLength - orf.start;
                 var end:int = sequenceLength - orf.end;
                 
-                orf.start = end;
-                orf.end = start;
-                
+				orf.setOneStart(start);
+				orf.setOneEnd(end);
+				
                 for(var j:int = 0; j < orf.startCodons.length; j++) {
                     orf.startCodons[j] = sequenceLength - orf.startCodons[j] - 1;
                 }

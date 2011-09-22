@@ -42,6 +42,6 @@ package org.jbei.bio.sequence.common
         public function set strand(value:int):void
         {
             _strand = value;
-        }
+        }		
     }
 }

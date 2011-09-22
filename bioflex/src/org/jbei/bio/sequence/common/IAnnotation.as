@@ -13,7 +13,7 @@ package org.jbei.bio.sequence.common
         * normalize to zero based half open intervals.
         */
         function get start():int;
-        function set start(value:int):void;
+        //function set start(value:int):void;
         
         /**
          * Annotation end position. This should be zero based half open intervals.
@@ -21,6 +21,6 @@ package org.jbei.bio.sequence.common
          * Try to normalize to zero based half open intervals.
          */
         function get end():int;
-        function set end(value:int):void;
+        //function set end(value:int):void;
     }
 }
