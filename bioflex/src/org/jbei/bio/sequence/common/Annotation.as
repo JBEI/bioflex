@@ -223,8 +223,8 @@ package org.jbei.bio.sequence.common
 			var currentLocation:Location;
 			
 			for (var i:int = 0; i < tempLocations.length; i++) {
+				currentLocation = tempLocations[i];
 				if (!shifting) { // search phase
-					currentLocation = tempLocations[i];
 					if (normalizedPosition >= currentLocation.start && normalizedPosition <= currentLocation.end) {
 						// position within this location. Shrink this location and shift the rest
 						currentLocation.end -= deletionLength;

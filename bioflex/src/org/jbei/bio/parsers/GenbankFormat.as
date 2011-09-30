@@ -1,5 +1,6 @@
 package org.jbei.bio.parsers
 {
+    import mx.collections.ArrayCollection;
     import mx.utils.StringUtil;
     
     import org.jbei.bio.sequence.alphabets.AbstractAlphabet;
@@ -250,6 +251,41 @@ package org.jbei.bio.parsers
             return splitBlocksByCharAt(block, 5);
         }
 
+		private static function parseGenbankLocation(text:String):Vector.<Array>
+		{
+			text = StringUtil.trim(text);
+			if ("join" == text.substr(0, 4)) {
+				text = StringUtil.trim(text.substr(5, text.length - 2));
+			}
+			var result:Vector.<Array> = new Vector.<Array>;
+			var startStopPattern:RegExp = new RegExp("[<>]*(\\d+)\\.\\.[<>]*(\\d+)", "");
+			var startOnlyPattern:RegExp = new RegExp("\\d+", "");
+			var genbankStart:int = -1;
+			var end:int = -1;
+			
+			var chunks:Array = text.split(",");
+			
+			for (var i:int = 0; i < chunks.length; i++) {
+				var chunk:String = chunks[i] as String;
+				chunk = StringUtil.trim(chunk);
+				var startStopMatches:Object = startStopPattern.exec(chunk);
+				
+				if (startStopMatches != null) {
+						genbankStart = parseInt(startStopMatches[1]);
+						end = parseInt(startStopMatches[2]);
+						result.push(new Array(genbankStart, end));
+				} else {
+					var startOnlyMatches:Object = startOnlyPattern.exec(chunk);
+					if (startOnlyMatches != null) {
+						genbankStart = parseInt(startOnlyMatches[0]);
+						end = genbankStart;
+						result.push(new Array(genbankStart, end));
+					}
+				}
+			}
+			return result;
+		}
+		
         private static function parseFeatureKeywordBlock(block:String):GenbankFeatureElement
         {
             var result:GenbankFeatureElement = new GenbankFeatureElement();
@@ -259,14 +295,18 @@ package org.jbei.bio.parsers
             if (location.charAt(0) == "c") { // complement
                 location = location.substr(11);
                 location = location.substr(0, location.length -1);
+				location = StringUtil.trim(location);
                 result.strand = -1;
             } else {
                 result.strand = 1;
             }
-            var splitLocation:Array = location.split("..");
-            result.genbankStart = parseInt(splitLocation[0]);
-            result.end = parseInt(splitLocation[1]);
-            
+			var tempLocations:Vector.<Array> = parseGenbankLocation(location);
+			
+			result.featureLocations = new Vector.<GenbankLocation>();
+			for (var j:int = 0; j < tempLocations.length; j++) {
+				result.featureLocations.push(new GenbankLocation(tempLocations[j][0], tempLocations[j][1]));
+			}
+			
             var qualifiers:Vector.<GenbankFeatureQualifier> = new Vector.<GenbankFeatureQualifier>();
             var i:int = 0;
             for (i = 0; i < qualifierBlocks.length; i++) {
@@ -613,10 +653,31 @@ package org.jbei.bio.parsers
                 for (var i:int = 0; i < featureKeyword.features.length; i++) {
                     tempFeature = featureKeyword.features[i];
                     result = result + "     " + paddedString(tempFeature.key, 16);
+					
+					var locationString:String = "";
+					if (tempFeature.featureLocations.length == 1) {
+						locationString = tempFeature.featureLocations[0].genbankStart + ".." + tempFeature.featureLocations[0].end;
+					} else {
+						locationString = "join(";
+						for (var n:int = 0; n < tempFeature.featureLocations.length; n++) {
+							if (tempFeature.featureLocations[n].genbankStart == tempFeature.featureLocations[n].end) {
+								locationString = locationString + tempFeature.featureLocations[n].genbankStart;
+							} else {
+								locationString = locationString + tempFeature.featureLocations[n].genbankStart + 
+									".." + tempFeature.featureLocations[n].end;
+							}
+							if (n != tempFeature.featureLocations.length - 1) {
+								locationString = locationString + ",";
+							}
+						}
+						
+						locationString = locationString + ")";
+					}
+					
                     if (tempFeature.strand == 1) {
-                        result = result + tempFeature.genbankStart.toString() + ".." + tempFeature.end.toString() + "\n";
+                        result = result + locationString + "\n";
                     } else {
-                        result = result + "complement(" + tempFeature.genbankStart.toString() + ".." + tempFeature.end.toString() + ")\n";
+                        result = result + "complement(" + locationString + ")\n";
                     }
                     if (tempFeature.featureQualifiers.length > 0) {
                         result = result + generateFeatureQualifiers(tempFeature.featureQualifiers);
