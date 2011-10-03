@@ -251,7 +251,15 @@ package org.jbei.bio.parsers
             return splitBlocksByCharAt(block, 5);
         }
 
-		private static function parseGenbankLocation(text:String):Vector.<Array>
+		/**
+		 * Parses a genbank style multiple location string.
+		 * 
+		 * @return Returns a Vector. Array of [genbankStart, end], in order of appearance.
+		 * 
+		 * @author Timothy Ham
+		 */
+		
+		public static function parseGenbankLocation(text:String):Vector.<Array>
 		{
 			text = StringUtil.trim(text);
 			if ("join" == text.substr(0, 4)) {
