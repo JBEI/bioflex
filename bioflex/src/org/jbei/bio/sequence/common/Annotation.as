@@ -207,43 +207,109 @@ package org.jbei.bio.sequence.common
 		 * 
 		 * @author Timothy Ham
 		 */
-		public function deleteAt(position:int, deletionLength:int, maxLength:int, circular:Boolean):Annotation
+		public function deleteAt(cutStart:int, cutLength:int, maxLength:int, circular:Boolean):Annotation
 		{
-			if (deletionLength < 1) {
+			if (cutLength < 1) {
 				return this;
 			}
-			var shifting:Boolean = false;
-			var tempEnd:int;
-			var offset:int = locations[0].start;
-			if (position < offset) { // deletion happened before the feature. Simply shift
-				shifting = true;
+			var expectedNewLength:int = -1;
+			if (cutStart < start && cutStart + cutLength <= start) {
+				expectedNewLength = end - start;
+			} else if (cutStart < start && cutStart + cutLength <= end) {
+				expectedNewLength = end - (cutStart + cutLength);
+			} else if (cutStart >= start && cutStart + cutLength <= end) {
+				expectedNewLength = (cutStart - start) + (end - (cutStart + cutLength)); 
+			} else if (cutStart <= end && cutStart + cutLength >= end) {
+				expectedNewLength = cutStart - start;
 			}
-			var normalizedPosition:int = position - offset;
-			var tempLocations:Vector.<Location> = getNormalizedLocations(maxLength);
-			var currentLocation:Location;
 			
-			for (var i:int = 0; i < tempLocations.length; i++) {
-				currentLocation = tempLocations[i];
-				if (!shifting) { // search phase
-					if (normalizedPosition >= currentLocation.start && normalizedPosition <= currentLocation.end) {
-						// position within this location. Shrink this location and shift the rest
-						currentLocation.end -= deletionLength;
-						shifting = true;
-						continue;
-					} else if (normalizedPosition < currentLocation.start) {
-						// shift this and the rest
-						currentLocation.start -= deletionLength;
-						currentLocation.end -= deletionLength;
-						shifting = true;
-						continue;
+			var shifting:int = 0;
+			var offset:int = locations[0].start;
+			var normalizedCutStart:int = cutStart - offset;
+			var newMinimum:int = 0;
+			if (normalizedCutStart < locations[0].start) {
+				newMinimum = normalizedCutStart;
+			}
+			var cutEnd:int = normalizedCutStart + cutLength;			
+			var tempLocations:Vector.<Location> = getNormalizedLocations(maxLength);
+			
+			// if deletion happened before feature, shift only, no delete
+			if (cutEnd <= locations[0].start) {
+				for (var j:int = 0; j < tempLocations.length; j++) {
+					locations[j].start -= cutLength;
+					locations[j].end -= cutLength;
+				}
+			} else {
+				// do deletions
+				var currentLocation:Location;
+	
+				shifting = 0;
+				
+				for (var i:int = 0; i < tempLocations.length; i++) {
+					currentLocation = tempLocations[i];
+					if (shifting == 0) {
+						if (normalizedCutStart >= currentLocation.end) {
+							continue;
+						} else if (cutEnd <= currentLocation.start && normalizedCutStart <= currentLocation.start && cutLength > 0) { 
+							// cuts are left, but is all before this location. Switch to shifting
+							currentLocation.start -= cutLength;
+							currentLocation.end -= cutLength;
+							shifting = cutLength;
+						} else if (cutEnd <= currentLocation.end) {
+							if (normalizedCutStart < currentLocation.start) {
+								// cut starts before and ends within this location
+								currentLocation.start = normalizedCutStart;
+								currentLocation.end -= cutLength;
+								shifting = cutLength;
+							} else if (normalizedCutStart >= currentLocation.start) { 
+								// cut entirely within this location
+								currentLocation.end -= cutLength;
+								shifting = cutLength;
+							}
+						} else if (cutEnd > currentLocation.end) { 
+							if (normalizedCutStart < currentLocation.start) { 
+								// cut starts before this location, and ends after this location
+								currentLocation.start = normalizedCutStart;
+								currentLocation.end = normalizedCutStart;
+							} else if (normalizedCutStart >= currentLocation.start) { 
+								// cut starts within this location and continues after this location
+								currentLocation.end = normalizedCutStart;
+							}
+						}
+					} else { // shifting
+						currentLocation.start -= shifting;
+						currentLocation.end -= shifting;
 					}
-				} else { // shifting phase
-					currentLocation.start -= deletionLength;
-					currentLocation.end -= deletionLength;
+				} // end for (var i:int = 0; i < tempLocations.length; i++) {
+			}
+
+			// remove zero length locations and combine locations that are next to each other
+			var combinedLocations:Vector.<Location> = new Vector.<Location>();
+			for (i = 0; i < tempLocations.length; i++) {
+				if (combinedLocations.length == 0) {
+					if (tempLocations[i].length > 0) {
+						combinedLocations.push(tempLocations[i]);	
+					}
+					continue;
+				}
+				if (combinedLocations[combinedLocations.length - 1].end == tempLocations[i].start) {
+					combinedLocations[combinedLocations.length - 1].end = tempLocations[i].end;
+				} else if (tempLocations[i].length > 0) {
+					combinedLocations.push(tempLocations[i]);
 				}
 			}
-			locations = deNormalizeLocations(tempLocations, offset, maxLength - deletionLength, circular);
 			
+			// first and last location must fill the length of the feature.
+			if (combinedLocations[0].start > newMinimum) {
+				combinedLocations[0].start = newMinimum;
+			}
+			
+			if (combinedLocations[combinedLocations.length - 1].end != newMinimum + expectedNewLength) {
+				combinedLocations[combinedLocations.length - 1].end = newMinimum + expectedNewLength;
+			}
+			
+			locations = deNormalizeLocations(combinedLocations, offset, maxLength - cutLength, circular);
+
 			return this;
 		}
 		
