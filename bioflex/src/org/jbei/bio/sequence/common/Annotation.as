@@ -213,31 +213,47 @@ package org.jbei.bio.sequence.common
 				return this;
 			}
 			var expectedNewLength:int = -1;
-			if (cutStart < start && cutStart + cutLength <= start) {
-				expectedNewLength = end - start;
-			} else if (cutStart < start && cutStart + cutLength <= end) {
-				expectedNewLength = end - (cutStart + cutLength);
-			} else if (cutStart >= start && cutStart + cutLength <= end) {
-				expectedNewLength = (cutStart - start) + (end - (cutStart + cutLength)); 
-			} else if (cutStart <= end && cutStart + cutLength >= end) {
-				expectedNewLength = cutStart - start;
-			}
 			
 			var shifting:int = 0;
 			var offset:int = locations[0].start;
 			var normalizedCutStart:int = cutStart - offset;
-			var newMinimum:int = 0;
-			if (normalizedCutStart < locations[0].start) {
-				newMinimum = normalizedCutStart;
+			var circularAdjustment:int = 0;
+			if (end < start && cutStart >= 0 && cutStart < end) { 
+				// cut is happening at wrapped around tail end of feature
+				normalizedCutStart += maxLength;
+				circularAdjustment = cutLength;
 			}
-			var cutEnd:int = normalizedCutStart + cutLength;			
+			var newMinimum:int = 0;
+			var normalizedCutEnd:int = normalizedCutStart + cutLength;			
 			var tempLocations:Vector.<Location> = getNormalizedLocations(maxLength);
 			
+			var normalizedStart:int = tempLocations[0].start;
+			var normalizedEnd:int = tempLocations[tempLocations.length - 1].end;
+			if (normalizedCutStart < normalizedStart && normalizedCutEnd <= normalizedStart) {
+				expectedNewLength = normalizedEnd - normalizedStart;
+			} else if (normalizedCutStart < normalizedStart && normalizedCutEnd <= normalizedEnd) {
+				expectedNewLength = normalizedEnd - (normalizedCutEnd);
+			} else if (normalizedCutStart >= normalizedStart && normalizedCutEnd <= normalizedEnd) {
+				expectedNewLength = normalizedEnd -normalizedStart - cutLength;
+			} else if (normalizedCutStart <= normalizedEnd && normalizedCutEnd >= normalizedEnd) {
+				expectedNewLength = normalizedCutStart - normalizedStart;
+			}
+			
+			if (normalizedCutStart < tempLocations[0].start) {
+				if (normalizedCutStart + cutLength >= tempLocations[0].start) {
+					newMinimum = normalizedCutStart;
+				} else if (normalizedCutStart + cutLength <= tempLocations[0].start) {
+					newMinimum = tempLocations[0].start - cutLength;
+				}
+			} else {
+				newMinimum = tempLocations[0].start;
+			}
+			
 			// if deletion happened before feature, shift only, no delete
-			if (cutEnd <= locations[0].start) {
+			if (normalizedCutEnd <= tempLocations[0].start) {
 				for (var j:int = 0; j < tempLocations.length; j++) {
-					locations[j].start -= cutLength;
-					locations[j].end -= cutLength;
+					tempLocations[j].start -= cutLength;
+					tempLocations[j].end -= cutLength;
 				}
 			} else {
 				// do deletions
@@ -250,12 +266,12 @@ package org.jbei.bio.sequence.common
 					if (shifting == 0) {
 						if (normalizedCutStart >= currentLocation.end) {
 							continue;
-						} else if (cutEnd <= currentLocation.start && normalizedCutStart <= currentLocation.start && cutLength > 0) { 
+						} else if (normalizedCutEnd <= currentLocation.start && normalizedCutStart <= currentLocation.start && cutLength > 0) { 
 							// cuts are left, but is all before this location. Switch to shifting
 							currentLocation.start -= cutLength;
 							currentLocation.end -= cutLength;
 							shifting = cutLength;
-						} else if (cutEnd <= currentLocation.end) {
+						} else if (normalizedCutEnd <= currentLocation.end) {
 							if (normalizedCutStart < currentLocation.start) {
 								// cut starts before and ends within this location
 								currentLocation.start = normalizedCutStart;
@@ -266,7 +282,7 @@ package org.jbei.bio.sequence.common
 								currentLocation.end -= cutLength;
 								shifting = cutLength;
 							}
-						} else if (cutEnd > currentLocation.end) { 
+						} else if (normalizedCutEnd > currentLocation.end) { 
 							if (normalizedCutStart < currentLocation.start) { 
 								// cut starts before this location, and ends after this location
 								currentLocation.start = normalizedCutStart;
@@ -308,7 +324,7 @@ package org.jbei.bio.sequence.common
 				combinedLocations[combinedLocations.length - 1].end = newMinimum + expectedNewLength;
 			}
 			
-			locations = deNormalizeLocations(combinedLocations, offset, maxLength - cutLength, circular);
+			locations = deNormalizeLocations(combinedLocations, offset, maxLength - cutLength, circular, circularAdjustment);
 
 			return this;
 		}
@@ -354,7 +370,6 @@ package org.jbei.bio.sequence.common
 				}
 				result.push(new Location(newStart, newEnd));
 			}
-			
 			return result;
 		}
 		
@@ -363,7 +378,7 @@ package org.jbei.bio.sequence.common
 		 * 
 		 * @author Timothy Ham
 		 */
-		private function deNormalizeLocations(tempLocations:Vector.<Location>, offset:int, maxLength:int, circular:Boolean):Vector.<Location>
+		private function deNormalizeLocations(tempLocations:Vector.<Location>, offset:int, maxLength:int, circular:Boolean, circularAdjustment:int = 0):Vector.<Location>
 		{
 			if (tempLocations.length == 0) {
 				return null;
@@ -377,16 +392,27 @@ package org.jbei.bio.sequence.common
 			for (var i:int = 0; i < tempLocations.length; i++) {
 				location = tempLocations[i];
 				newStart = location.start + offset;
-				if (circular && newStart >= maxLength) {
-					newStart -= maxLength;
+				if (circular && newStart > maxLength) {
+					newStart -= maxLength + circularAdjustment;
+				} else if (circular) {
+					newStart -= circularAdjustment;
 				}
+				
 				newEnd = location.end + offset;
-				if (circular && newEnd >= maxLength) {
-					newEnd -= maxLength;
+				if (circular && newEnd > maxLength) {
+					newEnd -= maxLength + circularAdjustment;
+				} else if (circular) {
+					newEnd -= circularAdjustment;
 				}
+				
+				// On rare occasions, the calculated value is two circular distances away. Handle this case.
+				if (circular && location.start + offset == maxLength && location.end + offset == maxLength + maxLength) {
+					newStart = 0;
+					newEnd = maxLength;
+				}
+
 				result.push(new Location(newStart, newEnd));
 			}
-			
 			return result;
 		}
 
