@@ -60,7 +60,7 @@ package org.jbei.bio.orf
             var orfs1Reverse:Vector.<ORF> = orfPerFrame(0, reverseSymbolList, minimumLength, StrandType.BACKWARD);
             var orfs2Reverse:Vector.<ORF> = orfPerFrame(1, reverseSymbolList, minimumLength, StrandType.BACKWARD);
             var orfs3Reverse:Vector.<ORF> = orfPerFrame(2, reverseSymbolList, minimumLength, StrandType.BACKWARD);
-            
+
             var reverseCombined:Vector.<ORF> = orfs1Reverse.concat(orfs2Reverse, orfs3Reverse);
             
             var sequenceLength:int = reverseSymbolList.length;
@@ -70,8 +70,8 @@ package org.jbei.bio.orf
                 var start:int = sequenceLength - orf.start;
                 var end:int = sequenceLength - orf.end;
                 
-				orf.setOneStart(start);
-				orf.setOneEnd(end);
+				orf.setOneStart(end);
+				orf.setOneEnd(start);
 				
                 for(var j:int = 0; j < orf.startCodons.length; j++) {
                     orf.startCodons[j] = sequenceLength - orf.startCodons[j] - 1;

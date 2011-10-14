@@ -147,6 +147,7 @@ package org.jbei.bio.sequence.common
 				tempLocation = tempLocations[i];
 				tempLocation.start = tempLocation.start + shiftBy;
 				tempLocation.end = tempLocation.end + shiftBy;
+				
 			}
 			
 			tempLocations = deNormalizeLocations(tempLocations, offset, maxLength, circular);
@@ -162,42 +163,46 @@ package org.jbei.bio.sequence.common
 		 */
 		public function insertAt(position:int, insertLength:int, maxLength:int, circular:Boolean):Annotation
 		{
-			var shifting:Boolean = false;
+			var shifting:int = 0;
 			var tempEnd:int;
 			var offset:int = locations[0].start;
-			if (position < offset) { // insertion happens before the feature. Simply shift
-				shifting = true;
-			}
+
 			var normalizedPosition:int = position - offset;
-			
+			var circularAdjustment:int = 0;
+			if (end < start && position >= 0 && position < end) { 
+				// insert is happening at wrapped around tail end of feature
+				normalizedPosition += maxLength;
+				circularAdjustment = -insertLength
+			}
 			var tempLocations:Vector.<Location> = getNormalizedLocations(maxLength);
 			var currentLocation:Location;
 			
-			/* For each feature, if insertion position is before the feature, shift the current 
-			feature and all the features after that. If the position is within the 
-			feature, resize that feature and shift back the rest.
+			/* For each location, if insertion position is before the location, shift the current 
+			location and all the locations after that. If the position is within the 
+			location, resize that location and shift back the rest.
 			*/
 			for (var i:int = 0; i < tempLocations.length; i++) {
-				if (!shifting) { // search phase
-					currentLocation = tempLocations[i];
-					if (normalizedPosition >= currentLocation.start && normalizedPosition <= currentLocation.end) {
+				currentLocation = tempLocations[i];
+				if (shifting == 0) { // search phase
+					if (normalizedPosition >= currentLocation.start && normalizedPosition < currentLocation.end) {
 						// position within this location. Grow this location and shift the rest
 						currentLocation.end += insertLength;
-						shifting = true;
+						shifting = insertLength;
 						continue;
 					} else if (normalizedPosition < currentLocation.start) {
 						// shift this and the rest
 						currentLocation.start += insertLength;
 						currentLocation.end += insertLength;
-						shifting = true;
+						shifting = insertLength;
 						continue;
 					}
 				} else { // shifting phase
 					currentLocation.start += insertLength;
 					currentLocation.end += insertLength;
 				}
-			}
-			locations = deNormalizeLocations(tempLocations, offset, maxLength + insertLength, circular);
+			} //end for (var i:int = 0; i < tempLocations.length; i++) {
+			
+			locations = deNormalizeLocations(tempLocations, offset, maxLength + insertLength, circular, circularAdjustment);
 
 			return this;
 		}
@@ -409,6 +414,14 @@ package org.jbei.bio.sequence.common
 				if (circular && location.start + offset == maxLength && location.end + offset == maxLength + maxLength) {
 					newStart = 0;
 					newEnd = maxLength;
+				}
+				
+				if (circular && newStart < 0) {
+					newStart += maxLength;
+				}
+				
+				if (circular && newEnd < 0) {
+					newEnd += maxLength;
 				}
 
 				result.push(new Location(newStart, newEnd));
