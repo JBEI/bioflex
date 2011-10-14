@@ -184,12 +184,13 @@ package org.jbei.bio.sequence.common
 			for (var i:int = 0; i < tempLocations.length; i++) {
 				currentLocation = tempLocations[i];
 				if (shifting == 0) { // search phase
-					if (normalizedPosition >= currentLocation.start && normalizedPosition < currentLocation.end) {
+					if (normalizedPosition > currentLocation.start && normalizedPosition < currentLocation.end) {
 						// position within this location. Grow this location and shift the rest
+						// If the cursor is at the start mark, it doesn't count as being within. 
 						currentLocation.end += insertLength;
 						shifting = insertLength;
 						continue;
-					} else if (normalizedPosition < currentLocation.start) {
+					} else if (normalizedPosition <= currentLocation.start) {
 						// shift this and the rest
 						currentLocation.start += insertLength;
 						currentLocation.end += insertLength;
@@ -444,16 +445,16 @@ package org.jbei.bio.sequence.common
 			var result:Vector.<Location> = new Vector.<Location>();
 			var offset:int = tempLocations[0].start;
 			var location:Location
-			var length:int;
+			var locationLength:int;
 			var featureLength:int = tempLocations[tempLocations.length - 1].end - offset;
 			var newStart:int;
 			
 			for (var i:int = tempLocations.length - 1; i > -1; i--) {
 				location = tempLocations[i];
-				length = location.end - location.start;
-				newStart = location.end - featureLength;
-				
-				result.push(new Location(newStart, newStart + length)); 
+				locationLength = location.end - location.start;
+				newStart = featureLength - location.end;
+
+				result.push(new Location(newStart, newStart + locationLength)); 
 			}
 			
 			return result;

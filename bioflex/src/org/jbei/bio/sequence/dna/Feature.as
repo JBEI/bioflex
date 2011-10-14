@@ -89,8 +89,9 @@ package org.jbei.bio.sequence.dna
             
 			var clonedLocations:Vector.<Location> = new Vector.<Location>();
 			for (var j:int = 0; j < locations.length; j++) {
-				clonedLocations.push(new Location(locations[j].start, locations[j].end));
+				clonedLocations.push((locations[j] as Location).clone());
 			}
+
 			clonedFeature.locations = clonedLocations;
 			
             if(_notes && _notes.length > 0) {
