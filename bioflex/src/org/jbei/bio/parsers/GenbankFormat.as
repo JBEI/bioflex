@@ -262,6 +262,10 @@ package org.jbei.bio.parsers
 		public static function parseGenbankLocation(text:String):Vector.<Array>
 		{
 			text = StringUtil.trim(text);
+			var reverseLocations:Boolean = false;
+			if ("complement(join" == text.substr(0, 15)) { // this is a properly formatted complement of joins
+				reverseLocations = true;
+			}
 			if ("join" == text.substr(0, 4)) {
 				text = StringUtil.trim(text.substr(5, text.length - 2));
 			}
@@ -290,6 +294,9 @@ package org.jbei.bio.parsers
 						result.push(new Array(genbankStart, end));
 					}
 				}
+			}
+			if (reverseLocations) {
+				result = result.reverse();
 			}
 			return result;
 		}
@@ -667,6 +674,9 @@ package org.jbei.bio.parsers
 						locationString = tempFeature.featureLocations[0].genbankStart + ".." + tempFeature.featureLocations[0].end;
 					} else {
 						locationString = "join(";
+						if (tempFeature.strand == -1) {
+							tempFeature.featureLocations = tempFeature.featureLocations.reverse();
+						}
 						for (var n:int = 0; n < tempFeature.featureLocations.length; n++) {
 							if (tempFeature.featureLocations[n].genbankStart == tempFeature.featureLocations[n].end) {
 								locationString = locationString + tempFeature.featureLocations[n].genbankStart;
