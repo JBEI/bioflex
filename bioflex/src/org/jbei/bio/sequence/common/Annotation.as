@@ -14,8 +14,6 @@ package org.jbei.bio.sequence.common
     */
     public class Annotation implements IAnnotation
     {
-        private var _start:int = 0;
-        private var _end:int = 0;
 		
 		// Location order is defined by the user, as there is no way to determine 
 		// order in an annotation spanning 0 on a circular DNA. 
@@ -106,19 +104,19 @@ package org.jbei.bio.sequence.common
         {
             var result:Boolean = false;
             
-            if(_start <= _end) { // annotation1 non-circular
+            if(start <= end) { // annotation1 non-circular
                 if(annotation.start <= annotation.end) { // annotation2 non-circular 
-                    result = ((_start <= annotation.start) && (_end >= annotation.end)); 
+                    result = ((start <= annotation.start) && (end >= annotation.end)); 
                 }
             } else { // annotation1 circular
                 if(annotation.start <= annotation.end) { // annotation2 non-circular
-                    result = ((annotation.end <= _end) || (annotation.start >= _start));
+                    result = ((annotation.end <= end) || (annotation.start >= start));
                 } else { // annotation1 circular
-                    result = ((_start <= annotation.start) && (_end >= annotation.end));
+                    result = ((start <= annotation.start) && (end >= annotation.end));
                 }
             }
-            
-            return result;
+
+			return result;
         }
 		
 		public function isMultiLocation():Boolean
