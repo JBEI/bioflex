@@ -120,8 +120,10 @@ package org.jbei.bio.parsers
             
             var subBlocks:Vector.<String> = null;
 
-            keyword = block.substr(0, 12);
-            keyword = StringUtil.trim(keyword);
+			var re:RegExp = / +/;
+			var chunks:Array = block.split(re);
+			
+            keyword = StringUtil.trim(chunks[0]);
             
             if (keyword == LOCUS_TAG) {
                 var locusResult:GenbankLocusKeyword = parseLocusBlock(block);
@@ -671,7 +673,11 @@ package org.jbei.bio.parsers
 					
 					var locationString:String = "";
 					if (tempFeature.featureLocations.length == 1) {
-						locationString = tempFeature.featureLocations[0].genbankStart + ".." + tempFeature.featureLocations[0].end;
+						if (tempFeature.featureLocations[0].genbankStart == tempFeature.featureLocations[0].end) {
+							locationString = tempFeature.featureLocations[0].genbankStart.toString();
+						} else {
+							locationString = tempFeature.featureLocations[0].genbankStart + ".." + tempFeature.featureLocations[0].end;
+						}
 					} else {
 						locationString = "join(";
 						if (tempFeature.strand == -1) {
