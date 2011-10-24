@@ -415,99 +415,27 @@ package org.jbei.bio.parsers
         {
             var result:GenbankLocusKeyword = new GenbankLocusKeyword();
             
-            var temp:Array = StringUtil.trim(block).split(" ");
+			var re:RegExp = / +/;
+            var temp:Array = StringUtil.trim(block).split(re);
             
-            var fields:Array = new Array();
-            for (var i:int = 0; i < temp.length; i++) {
-                if ("" != (temp[i] as String)) {
-                    fields.push(temp[i]);
-                }
-            }
+			if (temp.indexOf("bp") == 3) {
+				result.locusName = temp[1] as String;
+			} else {
+				result.locusName = temp[1] as String;
+			}
             
-            var temp2:Array = block.substr(12).split(" ");
-            if ("" == temp2[0] as String) {
-                result.locusName = "no_name";
-            } else {
-                result.locusName = fields[1] as String;
-            }
-            
-            if ((fields[4] as String).length == 6) {
-                result.strandType = (fields[4] as String).substring(0, 2);
-                result.naType = (fields[4] as String).substr(3);
-            } else {
-                result.strandType = "ds";
-                result.naType = "DNA";
-            }
+            result.strandType = "ds";
+            result.naType = "DNA";
             
             if (block.search("linear") != -1) {
                 result.linear = true;
-            } else {
+            } else if (block.search("LINEAR") != -1) {
+				result.linear = true;
+			} else {
                 result.linear = false;
             }
-                        
-            var divCode:String = (fields[fields.length - 2] as String);
-            if (divCode.length == 3) {
-                result.divisionCode = divCode;
-            }
-            
-            var strDate:String = (fields[fields.length - 1] as String);
-            
-            var year:int = parseInt(strDate.substring(7, 11)); 
-            var day:int = parseInt(strDate.substring(0, 2)); 
-            var strMonth:String = strDate.substring(3, 6);
-            var month:int = 1;
-            
-            switch (strMonth)
-            {
-                case "JAN":
-                    month = 0;
-                    break;
-                case "FEB":
-                    month = 1;
-                    break;
-                case "MAR":
-                    month = 2;
-                    break;
-                case "APR":
-                    month = 3;
-                    break;
-                case "MAY":
-                    month = 4;
-                    break;
-                case "JUN":
-                    month = 5;
-                    break;
-                case "JUL":
-                    month = 6;
-                    break;
-                case "AUG":
-                    month = 7;
-                    break;
-                case "SEP":
-                    month = 8;
-                    break;
-                case "OCT":
-                    month = 9;
-                    break;
-                case "NOV":
-                    month = 10;
-                    break;
-                case "DEC":
-                    month = 11;
-                    break;
-                    
-            }
 
-            var tempDate:Date = new Date();
-            tempDate.setUTCDate(day);
-            tempDate.setUTCFullYear(year);
-            tempDate.setUTCMonth(month);
-            tempDate.setUTCHours(0);
-            tempDate.setUTCMinutes(0);
-            tempDate.setUTCMilliseconds(0);
-            
-
-            result.date = tempDate;  
+            result.date = new Date();  
             
             return result;
         }
