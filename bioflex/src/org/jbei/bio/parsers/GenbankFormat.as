@@ -308,7 +308,11 @@ package org.jbei.bio.parsers
             var result:GenbankFeatureElement = new GenbankFeatureElement();
             var qualifierBlocks:Vector.<String> = splitFeatureQualifierBlocks(block);
             result.key = StringUtil.trim(block.substring(5, 21));
-            var location:String = StringUtil.trim(block.substr(21));
+            //var location:String = StringUtil.trim(block.substr(21));
+			var location:String = block.substr(21);
+			if (location.split("\n").length > 1) {
+				location = StringUtil.trim(location.split("\n")[0]);
+			}
             if (location.charAt(0) == "c") { // complement
                 location = location.substr(11);
                 location = location.substr(0, location.length -1);
