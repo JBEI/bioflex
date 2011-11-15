@@ -1,5 +1,6 @@
 package org.jbei.bio.sequence.common
 {
+	[RemoteClass(alias="org.jbei.bio.sequence.common.Location")]
 	/**
 	* Feature location
 	* 

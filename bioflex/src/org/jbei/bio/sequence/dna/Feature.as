@@ -15,7 +15,7 @@ package org.jbei.bio.sequence.dna
     {
         private var _name:String;
         private var _type:String;
-        private var _notes:Vector.<FeatureNote>;
+        private var _notes:Vector.<FeatureNote> = new Vector.<FeatureNote>();
         
         // Constructor
         /**
