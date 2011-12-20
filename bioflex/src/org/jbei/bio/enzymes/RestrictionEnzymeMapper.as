@@ -68,7 +68,6 @@ package org.jbei.bio.enzymes
                 if(seqLength <= match.index + reLength - 1) { break; } // sequence is too short
                 
                 var restrictionCutSite:RestrictionCutSite = new RestrictionCutSite(match.index, match.index + reLength, StrandType.FORWARD, restrictionEnzyme);
-                
                 restrictionCutSites.push(restrictionCutSite);
                 
                 match = forwardRegExpPattern.exec(sequence);
@@ -81,8 +80,8 @@ package org.jbei.bio.enzymes
                     
                     if(seqLength <= match2.index + reLength - 1) { break; } // sequence is too short
                     
-                    var restrictionCutSite2:RestrictionCutSite = new RestrictionCutSite(match2.index, match2.index + reLength, StrandType.BACKWARD, restrictionEnzyme);
-                    
+                    var restrictionCutSite2:RestrictionCutSite = new RestrictionCutSite(match2.index - 1, match2.index + reLength - 1, StrandType.BACKWARD, restrictionEnzyme);
+					
                     restrictionCutSites.push(restrictionCutSite2);
                     
                     match2 = reverseRegExpPattern.exec(sequence);
