@@ -39,16 +39,35 @@ package org.jbei.bio.tools
             }
 			
             for (var i:int = 0; i<reSitesList.length-1; i++) {
-                var fragment:DigestionFragment = new DigestionFragment(reSitesList[i].start, reSitesList[i+1].end, reSitesList[i+1].end-reSitesList[i].start, reSitesList[i].restrictionEnzyme, reSitesList[i+1].restrictionEnzyme);
+                var fragStart:int = reSitesList[i].start;
+                var fragEnd:int = reSitesList[i+1].end;
+                var fragLength:int = fragEnd - fragStart;
+                if (fragLength <= 0) { //happens if wrapping around from end to beginning (for circular dna)
+                    fragLength += dnaSequence.length;
+                    //note: this will still not catch the case where site i+1 wraps around to the 
+                    //beginning of the dna sequence and the two cut sites overlap (thus site i+1 has 
+                    //an end smaller than the end of site i, but greater than the start of site i)
+                    //this situation is probably not desirable in practice anyway
+                }
+                
+                var fragment:DigestionFragment = new DigestionFragment(fragStart, fragEnd, fragLength, reSitesList[i].restrictionEnzyme, reSitesList[i+1].restrictionEnzyme);
                 fragments.push(fragment);
             }
+            
             if (dnaSequence.circular) {
+                //the fragment that wraps around from the end to the beginning
                 var fragLength:int = reSitesList[0].end - reSitesList[reSitesList.length-1].start + dnaSequence.length;
+                if (reSitesList.length == 1 && reSitesList[0].end < reSitesList[0].start) {
+                    //in the case where there is only one site and the site wraps around from end to beginning
+                    fragLength += dnaSequence.length;
+                }
                 fragment = new DigestionFragment(reSitesList[reSitesList.length-1].start, reSitesList[0].end, fragLength, reSitesList[reSitesList.length-1].restrictionEnzyme, reSitesList[0].restrictionEnzyme);
                 fragments.push(fragment);
-            } else {
+            } else { //linear case
+                //the fragment from the beginning of the sequence to the first digestion site
                 fragment = new DigestionFragment(0, reSitesList[0].end, reSitesList[0].end, null, reSitesList[0].restrictionEnzyme);
                 fragments.push(fragment);
+                //the fragment from the last digestion site to the end of the sequence
                 fragment = new DigestionFragment(reSitesList[reSitesList.length-1].start, dnaSequence.length, dnaSequence.length - reSitesList[reSitesList.length-1].start, reSitesList[reSitesList.length-1].restrictionEnzyme, null);
                 fragments.push(fragment);
             }
