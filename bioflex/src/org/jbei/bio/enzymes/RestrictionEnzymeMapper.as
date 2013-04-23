@@ -46,7 +46,7 @@ package org.jbei.bio.enzymes
          * 
          * @see org.jbei.bio.enzymes.RestrictionCutSite
          */
-        public static function cutSequenceByRestrictionEnzyme(restrictionEnzyme:RestrictionEnzyme, sequenceSymbolList:SymbolList):Vector.<RestrictionCutSite> /* of RestrictionCutSite */
+        public static function cutSequenceByRestrictionEnzyme(restrictionEnzyme:RestrictionEnzyme, sequenceSymbolList:SymbolList):Vector.<RestrictionCutSite> 
         {
             var restrictionCutSites:Vector.<RestrictionCutSite> = new Vector.<RestrictionCutSite>();
             
@@ -60,14 +60,20 @@ package org.jbei.bio.enzymes
             
             var sequence:String = sequenceSymbolList.seqString();
             var seqLength:int = sequence.length;
+            sequence += sequence;
             
             var match:Object = forwardRegExpPattern.exec(sequence);
             while (match != null) {
                 if(match.index >= seqLength) { break; } // break when cut site start is more then seq length, because it means it's duplicate
+                var start:int = match.index;
+                var end:int = match.index + reLength;
+                if( end >= seqLength ) {
+                    end -= (seqLength - 1);
+                }
                 
-                if(seqLength <= match.index + reLength - 1) { break; } // sequence is too short
+                // if(seqLength <= match.index + reLength - 1) { break; } // sequence is too short
                 
-                var restrictionCutSite:RestrictionCutSite = new RestrictionCutSite(match.index, match.index + reLength, StrandType.FORWARD, restrictionEnzyme);
+                var restrictionCutSite:RestrictionCutSite = new RestrictionCutSite(start, end, StrandType.FORWARD, restrictionEnzyme);
                 restrictionCutSites.push(restrictionCutSite);
                 
                 match = forwardRegExpPattern.exec(sequence);
@@ -77,10 +83,15 @@ package org.jbei.bio.enzymes
                 var match2:Object = reverseRegExpPattern.exec(sequence);
                 while (match2 != null) {
                     if(match2.index >= seqLength) { break; } // break when cut site start is more then seq length, because it means it's duplicate
+                    start = match2.index - 1;
+                    end = match2.index + reLength - 1;
                     
-                    if(seqLength <= match2.index + reLength - 1) { break; } // sequence is too short
+                    //if(seqLength <= match2.index + reLength - 1) { break; } // sequence is too short
+                    if( end >= seqLength) {
+                        end -= seqLength;
+                    }
                     
-                    var restrictionCutSite2:RestrictionCutSite = new RestrictionCutSite(match2.index - 1, match2.index + reLength - 1, StrandType.BACKWARD, restrictionEnzyme);
+                    var restrictionCutSite2:RestrictionCutSite = new RestrictionCutSite(start, end, StrandType.BACKWARD, restrictionEnzyme);
 					
                     restrictionCutSites.push(restrictionCutSite2);
                     
